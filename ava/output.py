@@ -1,5 +1,7 @@
 import pyttsx3
-
+from ava.utterance import Utterance
+from log import log_output as log
+import threading
 
 class Output:
     def __init__(self):
@@ -16,26 +18,23 @@ class Output:
         self.synthesizer.connect('finished-utterance', self.on_finished_utterance)
         self.synthesizer.connect('started-word', self.on_started_word)
 
-    def speak(self, utterance, name=""):
-        pass
+    def speak(self, utterance: Utterance):
+        self.synthesizer.say(utterance.body, utterance.name)
+        self.synthesizer.startLoop()
+        print("THEREEEEEE")
 
     def on_finished_utterance(self, name, completed):
-        pass
+        log.debug("END")
+        t = threading.Thread(name="ccpyttsx3", target=self.killme, args=(self.synthesizer,))
+        t.setDaemon(True)
+        t.start()
+
+
 
     def on_started_word(self, name, location, length):
         pass
 
+    def killme(self, synth):
+        print("killme")
+        synth.endLoop()
 
-
-
-
-# for i, v in enumerate(voices):
-#     if 'en' in v.languages[0]:
-#         print(i, v.name, v.languages)
-# engine.say("Ciao bella! Como va. Ma che freddo fa")
-# engine.say("#LAUGH01# Lauren want's to have dinner with you! What do you say?")
-# engine.say("#LAUGH01# Okay! I'll go ahead and ask! Is there anything else?")
-tracy.say("Sally sells seashells by the seashore.", "shells")
-START = datetime.now()
-tracy.startLoop()
-print("there")

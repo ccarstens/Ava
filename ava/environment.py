@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from definitions import *
 import time
-
+import asyncio
 from log import log_environment as log
 from ava.avaagent import AvaAgent
 from ava.usercontroller import UserController
@@ -22,8 +22,8 @@ class Environment:
 
     def setup(self):
         log.debug("setting up environment")
-        self.setup_io()
         self.setup_ava()
+        self.setup_io()
         self.setup_user()
 
 
@@ -41,6 +41,7 @@ class Environment:
 
     def setup_user(self):
         self.user = UserController(self.user_jid, "ava", "../asl/user.asl")
+        self.user.synth = self.io.output.synthesizer
         future_u = self.user.start()
         future_u.result()
         self.user.bdi.set_singleton_belief("ava", self.ava_jid)

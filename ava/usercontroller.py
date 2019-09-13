@@ -28,7 +28,7 @@ class UserController(BDIAgent):
 
         async def run(self):
             await super().run()
-
+            # self.agent.synth.iterate()
             await asyncio.sleep(0.005)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
