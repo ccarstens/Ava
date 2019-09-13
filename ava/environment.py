@@ -3,9 +3,10 @@ from datetime import datetime
 from definitions import *
 import time
 
-from log import log
+from log import log_environment as log
 from ava.avaagent import AvaAgent
-from ava.useragent import UserAgent
+from ava.usercontroller import UserController
+from ava.iocontroller import IOController
 
 
 class Environment:
@@ -17,9 +18,11 @@ class Environment:
 
         self.ava = None
         self.user = None
+        self.io = None
 
     def setup(self):
         log.debug("setting up environment")
+        self.setup_io()
         self.setup_ava()
         self.setup_user()
 
@@ -27,7 +30,8 @@ class Environment:
     def stop(self):
         log.debug("stopping environment")
         self.ava.stop()
-
+        self.user.stop()
+        self.stop_io()
 
     def setup_ava(self):
         self.ava = AvaAgent(self.ava_jid, "ava", "../asl/ava.asl")
@@ -36,7 +40,13 @@ class Environment:
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
 
     def setup_user(self):
-        self.user = UserAgent(self.user_jid, "ava", "../asl/user.asl")
+        self.user = UserController(self.user_jid, "ava", "../asl/user.asl")
         future_u = self.user.start()
         future_u.result()
         self.user.bdi.set_singleton_belief("ava", self.ava_jid)
+
+    def setup_io(self):
+        self.io = IOController()
+
+    def stop_io(self):
+        pass

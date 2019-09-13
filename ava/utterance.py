@@ -1,0 +1,3 @@
+
+class Utterance:
+    pass

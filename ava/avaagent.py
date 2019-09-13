@@ -1,7 +1,7 @@
 from spade.template import Template
 from spade_bdi.bdi import BDIAgent
 
-from log import log
+from log import log_ava as log
 import asyncio
 
 from spade_bdi.bdi import parse_literal
@@ -27,7 +27,7 @@ class AvaAgent(BDIAgent):
 
             @self.agent.bdi_actions.add_function(".log", (str,))
             def _log(message):
-                log.info("AVA: " + message)
+                log.debug(message)
 
             @self.agent.bdi_actions.add_function(".ask_user_options", (str, tuple))
             def _ask_user_options(question, options):

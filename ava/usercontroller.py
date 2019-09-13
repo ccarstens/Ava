@@ -1,13 +1,13 @@
 from spade_bdi.bdi import BDIAgent
 import asyncio
-from log import log
+from log import log_user as log
 from spade.message import Message
 from spade.template import Template
 from spade_bdi.bdi import parse_literal
 import aioconsole as ac
 
 
-class UserAgent(BDIAgent):
+class UserController(BDIAgent):
     class UserAgentBehaviour(BDIAgent.BDIBehaviour):
         def add_custom_actions(self):
 
@@ -17,7 +17,7 @@ class UserAgent(BDIAgent):
 
             @self.agent.bdi_actions.add_function(".log", (str,))
             def _log(message):
-                log.info("USER: " + message)
+                log.info(message)
 
             @self.agent.bdi_actions.add_function(".ask_user_options", (str, tuple))
             def _ask_user_options(question, options):

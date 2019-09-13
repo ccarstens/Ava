@@ -3,12 +3,15 @@ from definitions import *
 from datetime import datetime
 
 
-def setup_logger():
+LOGFILE = f"{datetime.now(tz=None)}.log"
+
+
+def get_logger(classname):
     logging.getLogger().setLevel(logging.DEBUG)
 
-    env_logger = logging.getLogger(__name__)
+    logger = logging.getLogger(classname)
     c_handler = logging.StreamHandler()
-    f_handler = logging.FileHandler(LOG_DIR + f"/{datetime.now(tz=None)}.log")
+    f_handler = logging.FileHandler(LOG_DIR + "/" + LOGFILE)
     # c_handler.setLevel(logging.DEBUG)
     # f_handler.setLevel(logging.DEBUG)
 
@@ -17,10 +20,15 @@ def setup_logger():
     c_handler.setFormatter(c_format)
     f_handler.setFormatter(f_format)
 
-    env_logger.addHandler(c_handler)
-    env_logger.addHandler(f_handler)
-    return env_logger
+    logger.addHandler(c_handler)
+    logger.addHandler(f_handler)
+    return logger
 
 
 
-log = setup_logger()
+
+
+log_environment = get_logger("ENVIRONMENT")
+log_ava = get_logger("AVA")
+log_user = get_logger("USER")
+log_iocontroller = get_logger("IOCONTROLLER")
