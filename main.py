@@ -10,7 +10,7 @@ import logging
 # env.setup()
 
 if __name__ == '__main__':
-    ava = Ava("ava@localhost", "ava", "../asl/ava.asl")
+    ava = Ava("a@localhost", "ava", "../asl/ava.asl")
     f = ava.start()
     f.result()
     time.sleep(3)

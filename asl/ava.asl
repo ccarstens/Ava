@@ -3,7 +3,7 @@ started(yes).
 
 
 +!main <-
-    .print("yes").
+    .log("yes", _).
 
 +!testgoal <-
-    .print("WHAAT").
+    .log("WHAAT", _).
