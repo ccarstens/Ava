@@ -3,7 +3,4 @@ started(yes).
 
 
 +!main <-
-    .log("yes", _).
-
-+!testgoal <-
-    .log("WHAAT", _).
+    .log("Hello, this is Ava", _).
