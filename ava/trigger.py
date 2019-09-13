@@ -1,16 +1,12 @@
-from spade.template import Template
-from spade_bdi.bdi import BDIAgent
 
-# from log import log
+import time
 import asyncio
-
+from spade_bdi.bdi import BDIAgent
 from spade_bdi.bdi import parse_literal
-
+from spade.template import Template
 from spade.message import Message
 
 import aioconsole as ac
-
-
 
 class Ava(BDIAgent):
     class AvasPersonality(BDIAgent.BDIBehaviour):
@@ -45,7 +41,7 @@ class Ava(BDIAgent):
 
         async def run(self):
             await super().run()
-            print(".")
+
             await asyncio.sleep(0.005)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
@@ -60,13 +56,46 @@ class Ava(BDIAgent):
             response = await ac.ainput("XX")
             self.add_achievement_goal("tell_va", response, source=message.sender)
 
-    def setup(self):
-        # log.debug("Ava agent setup")
+
+    async def setup(self):
+        print("setting up " + self.name)
         template = Template(metadata={"performative": "BDI"})
         personality = self.AvasPersonality()
         personality.custom_ilf_types = ['getuserinput']
+
         self.add_behaviour(personality, template)
         personality.setup()
 
 
 
+
+
+
+if __name__ == '__main__':
+
+
+    ava = Ava("ava@localhost", "ava", "trigger.asl")
+    future = ava.start()
+    future.result()
+
+
+    ava.bdi.add_belief("mya", "cornelius carstens", 12, 12.57)
+    ava.bdi.add_achievement_goal("next_stage", "this is next", source="user")
+
+    # ava.bdi.add_belief("mya", "cornelius", 11, 12.58)
+    # ava.bdi.add_belief("closed", "monday")
+    # ava.bdi.add_belief("closed", "tuesday", source="me@me")
+    # time.sleep(1)
+    # print("new:\n{}".format("\n".join(ava.bdi.get_beliefs(source=True))))
+    # time.sleep(5)
+    # ava.bdi.add_achievement_goal("next_stage", "This is the next stage", source="user_input")
+    while True:
+
+        try:
+            time.sleep(0.5)
+        except KeyboardInterrupt:
+            print("Exiting")
+            ava.stop()
+            # user_agent.stop()
+            break
+    print("Done")
