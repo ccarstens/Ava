@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 from definitions import *
+import time
 
 
 class Environment:
@@ -9,7 +10,12 @@ class Environment:
         self.setup_logger()
         self.log.debug("ava started")
 
+    def setup(self):
+        self.log.debug("setting up environment")
 
+
+    def stop(self):
+        self.log.debug("stopping environment")
 
 
 
@@ -19,11 +25,13 @@ class Environment:
 
 
     def setup_logger(self):
+        logging.getLogger().setLevel(logging.DEBUG)
+
         env_logger = logging.getLogger(__name__)
         c_handler = logging.StreamHandler()
         f_handler = logging.FileHandler(LOG_DIR + f"/{datetime.now(tz=None)}.log")
-        c_handler.setLevel(logging.DEBUG)
-        f_handler.setLevel(logging.DEBUG)
+        # c_handler.setLevel(logging.DEBUG)
+        # f_handler.setLevel(logging.DEBUG)
 
         c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
         f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -32,4 +40,4 @@ class Environment:
 
         env_logger.addHandler(c_handler)
         env_logger.addHandler(f_handler)
-        self.log = logging.getLogger(__name__)
+        self.log = env_logger
