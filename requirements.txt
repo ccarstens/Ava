@@ -1,4 +1,5 @@
 agentspeak==0.1.0
+aioconsole==0.1.15
 aiohttp==3.6.0
 aiohttp-jinja2==1.1.2
 aioopenssl==0.4.1
@@ -12,6 +13,7 @@ atomicwrites==1.3.0
 attrs==19.1.0
 Babel==2.7.0
 better-exceptions-fork==0.2.1.post6
+certifi==2019.9.11
 cffi==1.12.3
 chardet==3.0.4
 colorama==0.4.1
@@ -137,15 +139,17 @@ pytest==5.1.2
 python-dateutil==2.8.0
 pyttsx3==2.71
 pytz==2019.2
+requests==2.22.0
 singletonify==0.2.3
 six==1.12.0
 sortedcollections==1.1.2
 sortedcontainers==2.1.0
 spade==3.1.3
-spade-bdi==0.1.4
+-e git+https://github.com/ccarstens/spade_bdi.git@4a9e147140ede761ca38eeb519a69e79cbe34b4f#egg=spade_bdi
 SpeechRecognition==3.8.1
 timeago==1.0.8
 tzlocal==1.5.1
+urllib3==1.25.3
 wcwidth==0.1.7
 yarl==1.3.0
 zipp==0.6.0
