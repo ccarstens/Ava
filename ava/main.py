@@ -2,7 +2,7 @@ from ava.environment import Environment
 import time
 import logging
 
-env = Environment()
+env = Environment("a@localhost", "controller_a@localhost")
 env.setup()
 
 while True:
