@@ -20,6 +20,10 @@ class Environment:
         self.user = None
         self.io = None
 
+    def run_once(self):
+        """mostly for testing features"""
+        self.io.input.listen()
+
     def setup(self):
         log.debug("setting up environment")
         self.setup_ava()
@@ -34,13 +38,13 @@ class Environment:
         self.stop_io()
 
     def setup_ava(self):
-        self.ava = AvaAgent(self.ava_jid, "ava", "../asl/ava.asl")
+        self.ava = AvaAgent(self.ava_jid, "ava", ASL_AVA)
         future_a = self.ava.start()
         future_a.result()
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
 
     def setup_user(self):
-        self.user = UserController(self.user_jid, "ava", "../asl/user.asl")
+        self.user = UserController(self.user_jid, "ava", ASL_USER)
         self.user.synth = self.io.output.synthesizer
         future_u = self.user.start()
         future_u.result()

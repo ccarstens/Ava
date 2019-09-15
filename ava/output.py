@@ -20,16 +20,10 @@ class Output:
 
     def speak(self, utterance: Utterance):
         self.synthesizer.say(utterance.body, utterance.name)
-        self.synthesizer.startLoop()
-        print("THEREEEEEE")
+        self.synthesizer.runAndWait()
 
     def on_finished_utterance(self, name, completed):
         log.debug("END")
-        t = threading.Thread(name="ccpyttsx3", target=self.killme, args=(self.synthesizer,))
-        t.setDaemon(True)
-        t.start()
-
-
 
     def on_started_word(self, name, location, length):
         pass

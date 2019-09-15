@@ -2,6 +2,7 @@ from spade.template import Template
 from spade_bdi.bdi import BDIAgent
 
 from log import log_ava as log
+import definitions
 import asyncio
 
 from spade_bdi.bdi import parse_literal

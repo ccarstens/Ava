@@ -10,6 +10,7 @@ import logging
 if __name__ == '__main__':
     env = Environment("a@localhost", "controller_a@localhost")
     env.setup()
+    env.run_once()
 
     while True:
         try:
