@@ -14,9 +14,8 @@ if __name__ == '__main__':
     x = 0
     while True:
         try:
-            print(x)
-            if x == 200:
-                env.io.queue_in.put("this is a test")
+            if x % 200 == 0:
+                print("main running")
             time.sleep(0.01)
             x += 1
         except KeyboardInterrupt:

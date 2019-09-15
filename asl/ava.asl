@@ -1,10 +1,11 @@
-started(yes).
-!main.
+started(no).
 
 
-+!main <-
++!main: started(yes) <-
     .log("Hello, this is Ava", _);
-    !myloop.
+    !!myloop;
+    !expect_response("hello-1", Response);
+    .log(Response, _).
 
 
 
@@ -13,4 +14,13 @@ started(yes).
     .print(".");
     !myloop.
 
++!expect_response(UtteranceID, Response) <-
+    usercontroller(UserJID);
+    .send(UserJID, getuserinput, UtteranceID);
+    while(not responded(_)){
+        .wait(400);
+        .print("waiting for response");
+    };
+    responded(Response);
+    -responded(Response).
 

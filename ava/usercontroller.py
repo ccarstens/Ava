@@ -5,6 +5,7 @@ from spade.message import Message
 from spade.template import Template
 from spade_bdi.bdi import parse_literal
 import aioconsole as ac
+from ava.iocontroller import IOController
 
 
 class UserController(BDIAgent):
@@ -33,14 +34,19 @@ class UserController(BDIAgent):
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
             functor, args = parse_literal(message.body)
-            args = args[0]
-
+            # args = args[0]
+            log.debug(f"received message with custom ilf type {message}")
+            self.agent.io.queue_in.put(message.body)
             # handle communication with user here
-            print("run: ", args[0])
-            print("run: ", args[1])
+            # print("run: ", args[0])
+            # print("run: ", args[1])
 
-            response = await ac.ainput("XX")
-            self.add_achievement_goal("tell_va", response, source=message.sender)
+            # response = await ac.ainput("XX")
+            # self.add_achievement_goal("tell_va", response, source=message.sender)
+
+    def __init__(self, jid, pw, asl, ioc: IOController):
+        super().__init__(jid, pw, asl)
+        self.io = ioc
 
     async def setup(self):
         log.debug("User agent setup")

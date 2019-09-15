@@ -27,9 +27,12 @@ class Environment:
 
     def setup(self):
         log.debug("setting up environment")
-        self.setup_ava()
         self.setup_io()
+        self.setup_ava()
         self.setup_user()
+
+        self.ava.bdi.set_singleton_belief("started", "yes")
+        self.ava.bdi.add_achievement_goal("main")
 
 
     def stop(self):
@@ -45,8 +48,7 @@ class Environment:
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
 
     def setup_user(self):
-        self.user = UserController(self.user_jid, "ava", ASL_USER)
-        self.user.synth = self.io.output.synthesizer
+        self.user = UserController(self.user_jid, "ava", ASL_USER, self.io)
         future_u = self.user.start()
         future_u.result()
         self.user.bdi.set_singleton_belief("ava", self.ava_jid)
