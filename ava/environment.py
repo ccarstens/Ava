@@ -22,8 +22,8 @@ class Environment:
 
     def run_once(self):
         """mostly for testing features"""
-        user_input = self.io.input.listen()
-        log.debug(f"received user input {user_input}")
+        # user_input = self.io.input.listen()
+        # log.debug(f"received user input {user_input}")
 
     def setup(self):
         log.debug("setting up environment")
