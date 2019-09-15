@@ -3,7 +3,9 @@ started(yes).
 
 
 +!main <-
-    .log("Hello, this is Ava", _).
+    .log("Hello, this is Ava", _);
+    !myloop.
+
 
 
 +!myloop <-

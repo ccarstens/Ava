@@ -37,6 +37,7 @@ class Input:
         log.debug("received audio data from microphone")
         try:
             wit_data = recognizer.recognize_wit(audio, key=WIT_API_KEY, show_all=True)
+            self.queue.put(wit_data)
         except sr.UnknownValueError:
             log.exception("wit.ai could not understand audio")
         except sr.RequestError as e:
