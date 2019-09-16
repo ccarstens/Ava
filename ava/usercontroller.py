@@ -10,6 +10,8 @@ import aioconsole as ac
 from ava.nlpcontroller import NLPController
 from queue import Empty
 
+from ava.utterance import Utterance
+
 
 class UserController(BDIAgent):
     class UserAgentBehaviour(BDIAgent.BDIBehaviour):
@@ -41,19 +43,20 @@ class UserController(BDIAgent):
         async def handle_message_with_custom_ilf_type(self, message: Message):
             functor, args = parse_literal(message.body)
             # args = args[0]
-            log.debug(f"received message with custom ilf type {message}")
-            self.agent.io_queue_in.put(message.body)
-            # handle communication with user here
-            # print("run: ", args[0])
-            # print("run: ", args[1])
 
-            # response = await ac.ainput("XX")
-            # self.add_achievement_goal("tell_va", response, source=message.sender)
+            log.debug(f"received message with custom ilf type {message}")
+
+            utterance = Utterance("What can I do for you?", message.body)
+            self.agent.io_queue_in.put(("expect_response", utterance))
+
     def handle_io_response(self):
         try:
             response = self.io_queue_out.get_nowait()
             if response:
-                log.debug(f"YEAHHHH {response['_text']}")
+                utterance_id, wit_response = response
+                log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
+                response = self.nlpc.process(response)
+                log.debug(f"received directive {response.directions}")
         except Empty:
             pass
         pass
@@ -63,6 +66,7 @@ class UserController(BDIAgent):
         self.io_queue_in = io_queue_in
         self.io_queue_out = io_queue_out
         self.nlpc = nlpc
+        self.active_utterance = None
 
     async def setup(self):
         log.debug("User agent setup")

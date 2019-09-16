@@ -14,10 +14,14 @@ class Input:
         self.microphone = sr.Microphone()
         self.queue = Queue(maxsize=0)  # inter-method queue, get wit data from callback to listen method
         self.io_queue_out = io_queue_out
+
+        self.active_utterance_id = ""
+
         with self.microphone as source:
             self.recognizer.adjust_for_ambient_noise(source)
 
-    def listen(self):
+    def listen(self, utterance_id: str):
+        self.active_utterance_id = utterance_id
         while self.microphone.stream is not None:
             log.error("microphone is not ready")
             time.sleep(0.1)
@@ -30,7 +34,9 @@ class Input:
                 parsed_user_input = self.queue.get()
                 if parsed_user_input:
                     log.debug(f"received parsed user input {parsed_user_input}")
-                    self.io_queue_out.put(parsed_user_input)
+                    self.io_queue_out.put((self.active_utterance_id, parsed_user_input))
+
+                    self.active_utterance_id = ""
                     stop_listening(wait_for_stop=False)
                     return True
             except KeyboardInterrupt:

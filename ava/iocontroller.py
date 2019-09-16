@@ -1,3 +1,5 @@
+from queue import Empty
+
 from log import log_iocontroller as log
 from ava.output import Output
 from ava.input import Input
@@ -23,10 +25,15 @@ class IOController:
     def run(self):
         while True:
             try:
-                incoming = self.queue_in.get()
+                incoming = self.queue_in.get_nowait()
                 if incoming:
-                    log.debug(f"got incoming request {incoming}")
-                    self.chat(incoming)
+                    # todo check flag and call method that either waits for response or doesnt
+                    flag, utterance = incoming
+
+                    log.debug(f"got incoming request {flag}")
+                    self.chat(utterance)
+            except Empty:
+                pass
             except KeyboardInterrupt:
                 break
 
@@ -45,10 +52,10 @@ class IOController:
     def setup_output(self):
         self.output = Output(self.input)
 
-    def chat(self, utterance_id):
+    def chat(self, utterance: Utterance):
         # todo get utterance, pass it to output.speak
         # ava sends .send request to usercont, usercont uses IOC to talk to user and get response, response is passed back, useragent creates an achievement goal to send a message to ava with the result
-        self.output.speak(Utterance("What should I do for you?", utterance_id))
+        self.output.speak(utterance)
 
 
 
