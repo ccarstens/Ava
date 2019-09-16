@@ -28,8 +28,7 @@ class Output:
 
     def on_finished_utterance(self, name, completed):
         log.debug(f"END {name}")
-        log.debug(f"input: {self.input.identifier}")
-        result = self.input.listen()
+        self.input.listen()
 
     def on_started_word(self, name, location, length):
         pass

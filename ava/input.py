@@ -1,17 +1,19 @@
 import speech_recognition as sr
 from log import log_input as log
 import time
-from queue import Queue
+from multiprocessing import Queue
 from env import *
 
 
 class Input:
-    def __init__(self):
+    def __init__(self, io_queue_out: Queue):
         log.debug("init")
+
         self.identifier = "input-object-1"
         self.recognizer = sr.Recognizer()
         self.microphone = sr.Microphone()
-        self.queue = Queue(maxsize=0)
+        self.queue = Queue(maxsize=0)  # inter-method queue, get wit data from callback to listen method
+        self.io_queue_out = io_queue_out
         with self.microphone as source:
             self.recognizer.adjust_for_ambient_noise(source)
 
@@ -28,8 +30,9 @@ class Input:
                 parsed_user_input = self.queue.get()
                 if parsed_user_input:
                     log.debug(f"received parsed user input {parsed_user_input}")
+                    self.io_queue_out.put(parsed_user_input)
                     stop_listening(wait_for_stop=False)
-                    return parsed_user_input
+                    return True
             except KeyboardInterrupt:
                 log.debug("keyboard interrupt while waiting for microphone input")
                 break

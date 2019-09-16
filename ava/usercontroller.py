@@ -1,3 +1,5 @@
+from multiprocessing import Queue
+
 from spade_bdi.bdi import BDIAgent
 import asyncio
 from log import log_user as log
@@ -6,6 +8,7 @@ from spade.template import Template
 from spade_bdi.bdi import parse_literal
 import aioconsole as ac
 from ava.iocontroller import IOController
+from queue import Empty
 
 
 class UserController(BDIAgent):
@@ -29,8 +32,20 @@ class UserController(BDIAgent):
 
         async def run(self):
             await super().run()
-            # self.agent.synth.iterate()
-            await asyncio.sleep(0.005)
+
+            try:
+                response = self.agent.io_queue_out.get_nowait()
+                if response:
+                    log.debug(f"YEAHHHH {response['_text']}")
+            except Empty:
+                pass
+
+            # if self.agent.io_queue_out.full():
+            #     log.debug("something in the queue")
+            #     log.debug("YEEEEAHHHHH")
+
+            # await asyncio.sleep(0.005)
+            await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
             functor, args = parse_literal(message.body)
@@ -44,9 +59,10 @@ class UserController(BDIAgent):
             # response = await ac.ainput("XX")
             # self.add_achievement_goal("tell_va", response, source=message.sender)
 
-    def __init__(self, jid, pw, asl, io_queue_in):
+    def __init__(self, jid, pw, asl, io_queue_in: Queue, io_queue_out: Queue):
         super().__init__(jid, pw, asl)
         self.io_queue_in = io_queue_in
+        self.io_queue_out = io_queue_out
 
     async def setup(self):
         log.debug("User agent setup")

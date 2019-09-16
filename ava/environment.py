@@ -10,14 +10,7 @@ from ava.iocontroller import IOController
 from multiprocessing import Process, Queue
 
 
-def io_worker(queue_in: Queue, queue_out: Queue):
-    print("IOProcess started")
-    print(queue_in.identifier)
-    from ava.iocontroller import IOController
 
-    io = IOController(queue_in, queue_out)
-    io.run()
-    pass
 
 
 
@@ -64,7 +57,7 @@ class Environment:
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
 
     def setup_user(self):
-        self.user = UserController(self.user_jid, "ava", ASL_USER, self.io_queue_in)
+        self.user = UserController(self.user_jid, "ava", ASL_USER, self.io_queue_in, self.io_queue_out)
         future_u = self.user.start()
         future_u.result()
         self.user.bdi.set_singleton_belief("ava", self.ava_jid)
@@ -78,7 +71,16 @@ class Environment:
     def setup_io_process(self):
         self.io_queue_in = Queue()
         self.io_queue_out = Queue()
-        self.io_queue_in.identifier = "my-queue"
-        self.io_process = Process(target=io_worker, name="io-process", daemon=True, args=(self.io_queue_in, self.io_queue_out))
+        self.io_queue_in.identifier = "io-queue-in"
+        self.io_queue_out.identifier = "io-queue-out"
+        self.io_process = Process(target=self.io_worker, name="io-process", daemon=True, args=(self.io_queue_in, self.io_queue_out))
         self.io_process.start()
+
+    def io_worker(self, queue_in: Queue, queue_out: Queue):
+        print("IOProcess started")
+        from ava.iocontroller import IOController
+
+        io = IOController(queue_in, queue_out)
+        io.run()
+        pass
 
