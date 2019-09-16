@@ -27,7 +27,7 @@ class Output:
         self.synthesizer.runAndWait()
 
     def on_finished_utterance(self, name, completed):
-        log.debug(f"END {name}")
+        log.debug(f"finished speaking utterance {name}")
         self.input.listen(name)
 
     def on_started_word(self, name, location, length):

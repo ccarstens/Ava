@@ -28,22 +28,20 @@ class IOController:
                 incoming = self.queue_in.get_nowait()
                 if incoming:
                     # todo check flag and call method that either waits for response or doesnt
-                    flag, utterance = incoming
+                    ilf_type, utterance = incoming
+                    log.debug(f"got incoming request {ilf_type}")
 
-                    log.debug(f"got incoming request {flag}")
-                    self.chat(utterance)
+                    if ilf_type == 'expect_response':
+                        self.chat(utterance)
+                    elif ilf_type == 'statement':
+                        self.statement(utterance)
+                    else:
+                        log.error(f"received the unknown ilf type {ilf_type}")
+
             except Empty:
                 pass
             except KeyboardInterrupt:
                 break
-
-
-    def setup_thread(self):
-        log.debug("setting up thread")
-        self.thread = Thread(target=self.run, name="ioc-thread", args=(self.queue_in, self.queue_out), daemon=True)
-        self.thread.start()
-        log.debug("thread started")
-
 
 
     def setup_input(self):

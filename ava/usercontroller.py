@@ -44,11 +44,22 @@ class UserController(BDIAgent):
         async def handle_message_with_custom_ilf_type(self, message: Message):
             functor, args = parse_literal(message.body)
             # args = args[0]
-
             log.debug(f"received message with custom ilf type {message}")
 
-            utterance = Utterance("What can I do for you?", message.body)
-            self.agent.io_queue_in.put(("expect_response", utterance))
+            ilf_type = message.metadata['ilf_type']
+
+            if ilf_type == 'expect_response':
+                utterance = Utterance("What can I do for you?", message.body)
+                self.agent.io_queue_in.put(("expect_response", utterance))
+            elif ilf_type == 'statement':
+                utterance = Utterance("What can I do for you?", message.body)
+                self.agent.io_queue_in.put(("statement", utterance))
+            else:
+                log.error(f"received message with the unrecognised ilf type {ilf_type}")
+
+
+
+
 
     def handle_io_response(self):
         try:
@@ -83,6 +94,6 @@ class UserController(BDIAgent):
 
         template = Template(metadata={"performative": "BDI"})
         personality = self.UserAgentBehaviour()
-        personality.custom_ilf_types = ['getuserinput']
+        personality.custom_ilf_types = ['expect_response', 'statement']
         self.add_behaviour(personality, template)
         personality.setup()

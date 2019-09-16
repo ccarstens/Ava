@@ -4,23 +4,19 @@ started(no).
 temperature(now, 66, cloudy).
 temperature(today_evening, 57, "clear skies").
 
-!stringtest.
+myliteral(started).
+
+# !stringtest.
 
 +!stringtest <-
-    beliefs(FF);
-    .print(FF);
-    temperature(now, Temp, Condition);
-    .concat("It's currently ", Condition, " and ", Temp , " degrees.", X);
-    .print(X);
-    temperature(today_evening, Temp2, Condition2);
-    .concat("In the evening there will be ", Condition2, " and ", Temp2 , " degrees.", Y);
-    .print(Y).
+    myliteral(Value);
+#    Value(StartValue);
+    .print(StartValue).
 
 +!main: started(yes) <-
     .log("Hello, this is Ava", _);
-    !!myloop;
-    !expect_response("hello_1", Response);
-    .log(Response, _).
+    !statement("hello_1", main, Finished);
+    .log(Finished, _).
 
 
 
@@ -31,14 +27,24 @@ temperature(today_evening, 57, "clear skies").
 
 +!expect_response(UtteranceID, Response) <-
     usercontroller(UserJID);
-    .send(UserJID, getuserinput, UtteranceID);
+    .send(UserJID, expect_response, UtteranceID);
     while(not responded(_)){
-        .wait(400);
+        .wait(33);
         .print("waiting for response");
     };
     responded(Response);
     -responded(Response).
 
++!statement(UtteranceID, Context, Finished) <-
+    usercontroller(UserJID);
+    .send(UserJID, statement, UtteranceID);
+    -+statement_finished(UtteranceID, Context, no);
+    while(not statement_finished(UtteranceID, Context, yes)){
+        .wait(33);
+        .print("waiting for statement to finish");
+    };
+    -+statement_finished(UtteranceID, Context, yes);
+    statement_finished(UtteranceID, Context, Finished).
 
 +responded_hello_1(temperature_set) <-
     .log("I am setting the temperature", _).
