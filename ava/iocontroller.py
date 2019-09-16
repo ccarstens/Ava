@@ -15,8 +15,8 @@ class IOController:
         self.queue_in = queue_in
         self.queue_out = queue_out
         self.thread = None
-        self.setup_output()
         self.setup_input()
+        self.setup_output()
 
 
     # def run(self, queue_in: Queue, queue_out: Queue):
@@ -41,7 +41,7 @@ class IOController:
         self.input = Input()
 
     def setup_output(self):
-        self.output = Output()
+        self.output = Output(self.input)
 
     def setup_queues(self):
         self.queue_in = Queue(maxsize=0)

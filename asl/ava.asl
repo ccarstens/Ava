@@ -5,6 +5,7 @@ started(no).
     .log("Hello, this is Ava", _);
     !!myloop;
     !expect_response("hello-1", Response);
+    !expect_response("hello-1", Response);
     .log(Response, _).
 
 

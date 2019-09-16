@@ -1,18 +1,19 @@
 import pyttsx3
 from ava.utterance import Utterance
 from log import log_output as log
-import threading
+from ava.input import Input
 
 
 class Output:
-    def __init__(self):
+    def __init__(self, input: Input):
         self.synthesizer = pyttsx3.init(debug=True)
         self.voice = list(filter(lambda sv: ('Tracy' in sv.name),
                                  self.synthesizer.getProperty('voices')))[0]
         self.synthesizer.setProperty('voice', self.voice.id)
         self.synthesizer.setProperty('rate', 175)
-
+        self.input = input
         self.setup_callbacks()
+
 
         # self.synthesizer.startLoop(useDriverLoop=False)
 
@@ -27,6 +28,8 @@ class Output:
 
     def on_finished_utterance(self, name, completed):
         log.debug(f"END {name}")
+        log.debug(f"input: {self.input.identifier}")
+        result = self.input.listen()
 
     def on_started_word(self, name, location, length):
         pass

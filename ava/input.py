@@ -8,6 +8,7 @@ from env import *
 class Input:
     def __init__(self):
         log.debug("init")
+        self.identifier = "input-object-1"
         self.recognizer = sr.Recognizer()
         self.microphone = sr.Microphone()
         self.queue = Queue(maxsize=0)
