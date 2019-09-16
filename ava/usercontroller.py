@@ -2,10 +2,11 @@ from multiprocessing import Queue
 
 from spade_bdi.bdi import BDIAgent
 import asyncio
-from log import log_user as log
+from log import log_user as log, dump
 from spade.message import Message
 from spade.template import Template
 from spade_bdi.bdi import parse_literal
+from spade_bdi.bdi import get_literal_from_functor_and_arguments
 import aioconsole as ac
 from ava.nlpcontroller import NLPController
 from queue import Empty
@@ -57,6 +58,9 @@ class UserController(BDIAgent):
                 log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
                 response = self.nlpc.process(response)
                 log.debug(f"received directive {response.directions}")
+                user_response_belief = get_literal_from_functor_and_arguments(f"responded_{response.utterance_id}", (response.directions,))
+                log.debug(dump(user_response_belief))
+                self.bdi.add_achievement_goal("tell_ava", user_response_belief)
         except Empty:
             pass
         pass

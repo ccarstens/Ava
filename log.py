@@ -1,7 +1,7 @@
 import logging
 from definitions import *
 from datetime import datetime
-
+import pprint
 
 LOGFILE = f"{datetime.now(tz=None)}.log"
 
@@ -25,6 +25,8 @@ def get_logger(classname):
     return logger
 
 
+pp = pprint.PrettyPrinter(indent=4)
+dump = pp.pformat
 
 
 

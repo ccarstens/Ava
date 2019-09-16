@@ -1,5 +1,5 @@
 import speech_recognition as sr
-from log import log_input as log
+from log import log_input as log, dump
 import time
 from multiprocessing import Queue
 from env import *
@@ -33,7 +33,7 @@ class Input:
             try:
                 parsed_user_input = self.queue.get()
                 if parsed_user_input:
-                    log.debug(f"received parsed user input {parsed_user_input}")
+                    log.debug(f"received parsed user input {dump(parsed_user_input)}")
                     self.io_queue_out.put((self.active_utterance_id, parsed_user_input))
 
                     self.active_utterance_id = ""
