@@ -1,6 +1,6 @@
 
 class Utterance:
-    def __init__(self, body, name, expects_response=True):
+    def __init__(self, body, id, expects_response=True):
         self.body = body
-        self.name = name
+        self.id = id
         self.expects_response = expects_response

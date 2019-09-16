@@ -1,26 +1,26 @@
 {
-    "module_1": [
-         {
-            "id": "default",
+    "module_1": {
+
+        "default": {
             "body": "blank {argument}",
             "expects_response": true
         },
-        {
-            "id": "greeting_1",
-            "body": "Hey {user_first_name}, it's good to hear you!",
-            "expects_response": false
+
+        "greeting_1": {
+        "body": "Hey {user_first_name}, it's good to hear you!",
+        "expects_response": false
         },
-        {
-            "id": "how_are_you_1",
-            "body": "How are you today?",
-            "expects_response": true
+
+        "how_are_you_1": {
+        "body": "How are you today?",
+        "expects_response": true
         }
-    ],
-    "module_2": [
-        {
-            "id": "statement_first_option_1",
+},
+    "module_2": {
+
+        "statement_first_option_1": {
             "body": "The first option is: {option_1}.",
             "expects_response": false
         }
-    ]
+    }
 }
