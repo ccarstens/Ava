@@ -33,19 +33,10 @@ class UserController(BDIAgent):
         async def run(self):
             await super().run()
 
-            try:
-                response = self.agent.io_queue_out.get_nowait()
-                if response:
-                    log.debug(f"YEAHHHH {response['_text']}")
-            except Empty:
-                pass
+            self.agent.handle_io_response()
 
-            # if self.agent.io_queue_out.full():
-            #     log.debug("something in the queue")
-            #     log.debug("YEEEEAHHHHH")
-
-            # await asyncio.sleep(0.005)
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.005)
+            # await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
             functor, args = parse_literal(message.body)
@@ -58,6 +49,14 @@ class UserController(BDIAgent):
 
             # response = await ac.ainput("XX")
             # self.add_achievement_goal("tell_va", response, source=message.sender)
+    def handle_io_response(self):
+        try:
+            response = self.io_queue_out.get_nowait()
+            if response:
+                log.debug(f"YEAHHHH {response['_text']}")
+        except Empty:
+            pass
+        pass
 
     def __init__(self, jid, pw, asl, io_queue_in: Queue, io_queue_out: Queue, nlpc: NLPController):
         super().__init__(jid, pw, asl)
