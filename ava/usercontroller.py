@@ -12,6 +12,7 @@ from ava.nlpcontroller import NLPController
 from queue import Empty
 
 from ava.utterance import Utterance
+from ava.utterancedb import UtteranceDB
 
 
 class UserController(BDIAgent):
@@ -46,16 +47,13 @@ class UserController(BDIAgent):
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")
 
-            ilf_type = message.metadata['ilf_type']
 
-            if ilf_type == 'expect_response':
-                utterance = Utterance("What can I do for you?", message.body)
-                self.agent.io_queue_in.put(("expect_response", utterance))
-            elif ilf_type == 'statement':
-                utterance = Utterance("What can I do for you?", message.body)
-                self.agent.io_queue_in.put(("statement", utterance))
+            utterance = self.agent.db.get(message.body)
+
+            if utterance is not None:
+                self.agent.io_queue_in.put(utterance)
             else:
-                log.error(f"received message with the unrecognised ilf type {ilf_type}")
+                log.error("no utterance received")
 
 
 
@@ -65,28 +63,41 @@ class UserController(BDIAgent):
         try:
             response = self.io_queue_out.get_nowait()
             if response:
-                utterance_id, wit_response = response
+                flag, payload = response
+                if flag == "STATEMENT_FINISHED":
+                    log.debug("statement finished")
+                    utterance = payload
 
-                log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
-                response = self.nlpc.process(response)
 
-                log.debug(f"received directive {response.directions}")
+                    finished_belief = get_literal_from_functor_and_arguments("statement_finished", (utterance.id, ))
 
-                user_response_belief = get_literal_from_functor_and_arguments(f"responded_{response.utterance_id}", (response.directions,))
+                    pass
+                elif flag == "RECEIVED_USER_RESPONSE":
+                    utterance_id, wit_response = payload
 
-                log.debug(dump(user_response_belief))
+                    log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
-                self.bdi.add_achievement_goal("tell_ava", user_response_belief)
+                    response = self.nlpc.process(response)
+
+                    log.debug(f"received directive {response.directions}")
+
+                    user_response_belief = get_literal_from_functor_and_arguments(f"responded_{response.utterance_id}", (response.directions,))
+
+                    log.debug(dump(user_response_belief))
+
+                    self.bdi.add_achievement_goal("tell_ava", user_response_belief)
+
         except Empty:
             pass
         pass
 
-    def __init__(self, jid, pw, asl, io_queue_in: Queue, io_queue_out: Queue, nlpc: NLPController):
+    def __init__(self, jid, pw, asl, io_queue_in: Queue, io_queue_out: Queue, nlpc: NLPController, db: UtteranceDB):
         super().__init__(jid, pw, asl)
         self.io_queue_in = io_queue_in
         self.io_queue_out = io_queue_out
         self.nlpc = nlpc
+        self.db = db
         self.active_utterance = None
 
     async def setup(self):

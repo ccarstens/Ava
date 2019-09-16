@@ -1,18 +1,10 @@
-import logging
-from datetime import datetime
 from env import *
-import time
-import asyncio
 from log import log_environment as log
 from ava.avaagent import AvaAgent
 from ava.usercontroller import UserController
-from ava.iocontroller import IOController
 from multiprocessing import Process, Queue
 from ava.nlpcontroller import NLPController
-
-
-
-
+from ava.utterancedb import UtteranceDB
 
 
 class Environment:
@@ -30,6 +22,8 @@ class Environment:
         self.io_queue_in = None
         self.io_queue_out = None
 
+        self.db = None
+
     def run_once(self):
         """mostly for testing features"""
         # user_input = self.io.input.listen()
@@ -37,7 +31,7 @@ class Environment:
 
     def setup(self):
         log.debug("setting up environment")
-        # self.setup_io()
+        self.setup_db()
         self.setup_io_process()
         self.setup_nlpc()
         self.setup_ava()
@@ -63,7 +57,7 @@ class Environment:
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
 
     def setup_user(self):
-        self.user = UserController(self.user_jid, "ava", ASL_USER, self.io_queue_in, self.io_queue_out, self.nlpc)
+        self.user = UserController(self.user_jid, "ava", ASL_USER, self.io_queue_in, self.io_queue_out, self.nlpc, self.db)
         future_u = self.user.start()
         future_u.result()
         self.user.bdi.set_singleton_belief("ava", self.ava_jid)
@@ -76,9 +70,14 @@ class Environment:
         self.io_process = Process(target=self.io_worker, name="io-process", daemon=True, args=(self.io_queue_in, self.io_queue_out))
         self.io_process.start()
 
+    def setup_db(self):
+        self.db = UtteranceDB(UTTERANCE_DB_FILE)
+        self.db.setup()
+
     def io_worker(self, queue_in: Queue, queue_out: Queue):
-        print("IOProcess started")
         from ava.iocontroller import IOController
+        from log import log_ioprocess as log
+        log.debug("IOProcess started")
 
         io = IOController(queue_in, queue_out)
         io.run()

@@ -15,7 +15,7 @@ myliteral(started).
 
 +!main: started(yes) <-
     .log("Hello, this is Ava", _);
-    !statement("hello_1", main, Finished);
+    !statement("greeting_1", main, Finished);
     .log(Finished, _).
 
 
@@ -39,7 +39,7 @@ myliteral(started).
     usercontroller(UserJID);
     .send(UserJID, statement, UtteranceID);
     -+statement_finished(UtteranceID, Context, no);
-    while(not statement_finished(UtteranceID, Context, yes)){
+    while(not statement_finished(UtteranceID, _, yes)){
         .wait(33);
         .print("waiting for statement to finish");
     };
