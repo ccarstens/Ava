@@ -55,11 +55,17 @@ class UserController(BDIAgent):
             response = self.io_queue_out.get_nowait()
             if response:
                 utterance_id, wit_response = response
+
                 log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
+
                 response = self.nlpc.process(response)
+
                 log.debug(f"received directive {response.directions}")
+
                 user_response_belief = get_literal_from_functor_and_arguments(f"responded_{response.utterance_id}", (response.directions,))
+
                 log.debug(dump(user_response_belief))
+
                 self.bdi.add_achievement_goal("tell_ava", user_response_belief)
         except Empty:
             pass

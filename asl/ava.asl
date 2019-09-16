@@ -1,10 +1,14 @@
+{include("beliefs.asl")}
+
 started(no).
 temperature(now, 66, cloudy).
 temperature(today_evening, 57, "clear skies").
 
-# !stringtest.
+!stringtest.
 
 +!stringtest <-
+    beliefs(FF);
+    .print(FF);
     temperature(now, Temp, Condition);
     .concat("It's currently ", Condition, " and ", Temp , " degrees.", X);
     .print(X);
