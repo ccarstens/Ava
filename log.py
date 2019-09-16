@@ -28,9 +28,10 @@ def get_logger(classname):
 
 
 
-log_environment = get_logger("ENVIRONMENT")
+log_environment = get_logger("ENV")
 log_ava = get_logger("AVA")
 log_user = get_logger("USER")
-log_iocontroller = get_logger("IOCONTROLLER")
-log_output = get_logger("OUTPUT")
-log_input = get_logger("INPUT")
+log_iocontroller = get_logger("IOC")
+log_output = get_logger("OUT")
+log_input = get_logger("IN")
+log_nlp = get_logger("NLPC")

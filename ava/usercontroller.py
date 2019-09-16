@@ -7,7 +7,7 @@ from spade.message import Message
 from spade.template import Template
 from spade_bdi.bdi import parse_literal
 import aioconsole as ac
-from ava.iocontroller import IOController
+from ava.nlpcontroller import NLPController
 from queue import Empty
 
 
@@ -59,10 +59,11 @@ class UserController(BDIAgent):
             # response = await ac.ainput("XX")
             # self.add_achievement_goal("tell_va", response, source=message.sender)
 
-    def __init__(self, jid, pw, asl, io_queue_in: Queue, io_queue_out: Queue):
+    def __init__(self, jid, pw, asl, io_queue_in: Queue, io_queue_out: Queue, nlpc: NLPController):
         super().__init__(jid, pw, asl)
         self.io_queue_in = io_queue_in
         self.io_queue_out = io_queue_out
+        self.nlpc = nlpc
 
     async def setup(self):
         log.debug("User agent setup")
