@@ -3,28 +3,27 @@ from ava.output import Output
 from ava.input import Input
 from ava.utterance import Utterance
 from threading import Thread
-from queue import Queue
+from multiprocessing import Queue
 import time
 
 
 class IOController:
-    def __init__(self):
+    def __init__(self, queue_in: Queue, queue_out: Queue):
         log.debug("IOController init")
         self.input = None
         self.output = None
-        self.queue_in = None
-        self.queue_out = None
+        self.queue_in = queue_in
+        self.queue_out = queue_out
         self.thread = None
-        self.setup_queues()
-        self.setup_input()
         self.setup_output()
-        self.setup_thread()
+        self.setup_input()
 
 
-    def run(self, queue_in: Queue, queue_out: Queue):
+    # def run(self, queue_in: Queue, queue_out: Queue):
+    def run(self):
         while True:
             # self.output.synthesizer.iterate()
-            incoming = queue_in.get()
+            incoming = self.queue_in.get()
             if incoming:
                 log.debug(f"got incoming request {incoming}")
                 self.chat(incoming)

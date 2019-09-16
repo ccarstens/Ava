@@ -36,7 +36,7 @@ class UserController(BDIAgent):
             functor, args = parse_literal(message.body)
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")
-            self.agent.io.queue_in.put(message.body)
+            self.agent.io_queue_in.put(message.body)
             # handle communication with user here
             # print("run: ", args[0])
             # print("run: ", args[1])
@@ -44,9 +44,9 @@ class UserController(BDIAgent):
             # response = await ac.ainput("XX")
             # self.add_achievement_goal("tell_va", response, source=message.sender)
 
-    def __init__(self, jid, pw, asl, ioc: IOController):
+    def __init__(self, jid, pw, asl, io_queue_in):
         super().__init__(jid, pw, asl)
-        self.io = ioc
+        self.io_queue_in = io_queue_in
 
     async def setup(self):
         log.debug("User agent setup")
