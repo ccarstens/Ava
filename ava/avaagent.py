@@ -1,16 +1,9 @@
-from spade.template import Template
-from spade_bdi.bdi import BDIAgent
-
-from log import log_ava as log
-import definitions
 import asyncio
-
-from spade_bdi.bdi import parse_literal
-
+from log import log_ava as log
 from spade.message import Message
-
-import aioconsole as ac
-
+from spade_bdi.bdi import BDIAgent
+from spade.template import Template
+from spade_bdi.bdi import parse_literal
 
 
 class AvaAgent(BDIAgent):
@@ -48,11 +41,11 @@ class AvaAgent(BDIAgent):
             args = args[0]
 
             # handle communication with user here
-            print("run: ", args[0])
-            print("run: ", args[1])
+            # print("run: ", args[0])
+            # print("run: ", args[1])
 
-            response = await ac.ainput("XX")
-            self.add_achievement_goal("tell_va", response, source=message.sender)
+            # response = await ac.ainput("XX")
+            # self.add_achievement_goal("tell_va", response, source=message.sender)
 
     async def setup(self):
         log.debug("Ava agent setup")
