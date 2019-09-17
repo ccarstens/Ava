@@ -7,11 +7,9 @@ from spade.message import Message
 from spade.template import Template
 from spade_bdi.bdi import parse_literal
 from spade_bdi.bdi import get_literal_from_functor_and_arguments
-import aioconsole as ac
 from ava.nlpcontroller import NLPController
 from queue import Empty
 
-from ava.utterance import Utterance
 from ava.utterancedb import UtteranceDB
 
 
@@ -63,22 +61,28 @@ class UserController(BDIAgent):
         try:
             response = self.io_queue_out.get_nowait()
             if response:
+                log.debug(response)
                 flag, payload = response
                 if flag == "STATEMENT_FINISHED":
                     log.debug("statement finished")
                     utterance = payload
 
+                    context_literal = get_literal_from_functor_and_arguments("main")
+
+                    status_literal = get_literal_from_functor_and_arguments("yes")
 
 
-                    finished_belief = get_literal_from_functor_and_arguments("statement_finished", (utterance.id, ))
+                    finished_belief = get_literal_from_functor_and_arguments("statement_finished", (utterance.id, context_literal, status_literal))
+
+
+                    self.bdi.add_achievement_goal("tell_ava", finished_belief)
 
                     pass
                 elif flag == "RECEIVED_USER_RESPONSE":
                     utterance_id, wit_response = payload
-
                     log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
-                    response = self.nlpc.process(response)
+                    response = self.nlpc.process(payload)
 
                     log.debug(f"received directive {response.directions}")
 
@@ -108,3 +112,9 @@ class UserController(BDIAgent):
         personality.custom_ilf_types = ['expect_response', 'statement']
         self.add_behaviour(personality, template)
         personality.setup()
+
+        # message = Message(to="a@localhost")
+        # message.set_metadata('performative', 'BDI')
+        # message.set_metadata('ilf_type', 'tell')
+        # message.body = 'test_belief("greeting_2", main, yes)'
+        # await self.bdi.send(message)

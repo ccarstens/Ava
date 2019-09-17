@@ -7,12 +7,27 @@
         },
 
         "greeting_1": {
-        "body": "Hey {user_first_name}, it's good to hear you!",
+        "body": "Hey {user_first_name}. it's good to hear you!",
+        "expects_response": false
+        },
+
+        "greeting_2": {
+        "body": "Hey!",
         "expects_response": false
         },
 
         "how_are_you_1": {
         "body": "How are you today?",
+        "expects_response": true
+        },
+
+        "offer_help_1": {
+        "body": "What can I do for you?",
+        "expects_response": true
+        },
+
+        "tell_weather_1": {
+        "body": "It's currently sunny and 67 degrees in San Francisco.",
         "expects_response": true
         }
 },

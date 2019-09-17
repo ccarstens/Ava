@@ -15,7 +15,13 @@ if __name__ == '__main__':
     while True:
         try:
             if x % 200 == 0:
-                print("main running")
+                # print("main running")
+                pass
+
+            if x == 200:
+                y = env.ava.bdi.get_beliefs()
+                print(y)
+                
             time.sleep(0.01)
             x += 1
         except KeyboardInterrupt:

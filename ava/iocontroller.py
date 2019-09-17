@@ -41,7 +41,7 @@ class IOController:
         self.input = Input(self.queue_out)
 
     def setup_output(self):
-        self.output = Output(self.input, self.db)
+        self.output = Output(self.input, self.db, self.queue_out)
 
     def setup_db(self):
         self.db = UtteranceDB(UTTERANCE_DB_FILE)

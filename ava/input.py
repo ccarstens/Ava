@@ -34,7 +34,7 @@ class Input:
                 parsed_user_input = self.queue.get()
                 if parsed_user_input:
                     log.debug(f"received parsed user input {dump(parsed_user_input)}")
-                    self.io_queue_out.put((self.active_utterance_id, parsed_user_input))
+                    self.io_queue_out.put(("RECEIVED_USER_RESPONSE", (self.active_utterance_id, parsed_user_input)))
 
                     self.active_utterance_id = ""
                     stop_listening(wait_for_stop=False)

@@ -6,6 +6,8 @@ temperature(today_evening, 57, "clear skies").
 
 myliteral(started).
 
+important_id("greeting_2").
+
 # !stringtest.
 
 +!stringtest <-
@@ -15,8 +17,11 @@ myliteral(started).
 
 +!main: started(yes) <-
     .log("Hello, this is Ava", _);
-    !statement("greeting_1", main, Finished);
-    .log(Finished, _).
+
+    !expect_response("offer_help_1", Response);
+    .log("finished", _);
+    .log("now we can do other things, like looping", _);
+    !myloop.
 
 
 
@@ -39,10 +44,11 @@ myliteral(started).
     usercontroller(UserJID);
     .send(UserJID, statement, UtteranceID);
     -+statement_finished(UtteranceID, Context, no);
-    while(not statement_finished(UtteranceID, _, yes)){
+    while(not statement_finished(UtteranceID, Context, yes)){
         .wait(33);
         .print("waiting for statement to finish");
     };
+    .log("I CAN CONTINUE NOW", _);
     -+statement_finished(UtteranceID, Context, yes);
     statement_finished(UtteranceID, Context, Finished).
 
@@ -51,6 +57,22 @@ myliteral(started).
 
 
 +responded_hello_1(temperature_get) <-
-    temperature(now, Temp, Condition);
+    ?temperature(now, Temp, Condition);
     .concat("It's currently ", Condition, " and ", Temp , " degrees.", X);
     .log(X, _).
+
+    
++responded_offer_help_1("temperature_get") <-
+    .print("no probs here");
+    !statement("tell_weather_1", response, Status).
+
++responded_offer_help_1(Sth) <-
+    .print("HEREEE").
+
+
+
++statement_finished("greeting_2", Context, Status) <-
+    .print("CHHAAAANGE");
+    .print(Context);
+    .print(Status).
+

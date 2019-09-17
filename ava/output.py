@@ -29,7 +29,7 @@ class Output:
         self.synthesizer.connect('started-word', self.on_started_word)
 
     def speak(self, utterance: Utterance):
-        self.synthesizer.say(utterance.body, utterance.name)
+        self.synthesizer.say(utterance.body, utterance.id)
         self.synthesizer.runAndWait()
 
     def on_finished_utterance(self, name, completed):
