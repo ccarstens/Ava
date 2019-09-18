@@ -53,3 +53,9 @@ class UtteranceDB:
 
         fillins_list = create_list_from_string(fillins_list_string)
         return uid.groups(0)[0], fillins_list
+
+    def get_by_agent_string(self, message_string: str):
+        utterance_id, fill_ins = self.extract_data_from_agent_message_string(message_string)
+        utterance = self.get(utterance_id)
+        utterance.fill_ins = fill_ins
+        return utterance

@@ -47,7 +47,7 @@ def test_if_conversion_from_dict_data_to_utterance_object_works_well():
 
     assert isinstance(utterance, Utterance)
     assert utterance.id == "hello_1"
-    assert utterance.body == "Hey this is me"
+    assert utterance.get_body() == "Hey this is me"
     assert utterance.expects_response is True
 
 
@@ -59,7 +59,7 @@ def test_if_conversion_works_if_no_expects_response_is_set():
     utterance = db.transform(raw_data)
     assert isinstance(utterance, Utterance)
     assert utterance.id == "hello_1"
-    assert utterance.body == "Hey this is me"
+    assert utterance.get_body() == "Hey this is me"
     assert utterance.expects_response is True
 
 
@@ -86,6 +86,7 @@ def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body()
     assert fill_ins[0] == "6pm"
     assert fill_ins[1] == "7:30pm"
 
+
 def test_message_parser_can_deal_with_empty_list():
     message_body = "[time_suggestion_based_on_home_arrival_1, []]"
 
@@ -99,3 +100,14 @@ def test_message_parser_can_deal_with_empty_list():
     assert uid == "time_suggestion_based_on_home_arrival_1"
 
 
+def test_get_by_agent_string_returns_utterance_instance_when_getting_a_well_formed_string():
+    message_body = "[default, []]"
+
+    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db.setup()
+
+    utterance = db.get_by_agent_string(message_body)
+
+    assert isinstance(utterance, Utterance)
+    assert utterance.fill_ins == []
+    assert utterance.id == "default"
