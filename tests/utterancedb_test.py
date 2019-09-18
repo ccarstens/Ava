@@ -73,3 +73,29 @@ def test_if_db_get_returns_a_valid_utterance_instance():
     assert utterance.id == "default"
 
 
+def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body():
+    message_body = "[time/suggestion/option_1, [6pm, 7:30pm]]"
+
+    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db.setup()
+
+    uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
+
+    assert len(fill_ins) == 2
+    assert uid == "time/suggestion/option_1"
+    assert fill_ins[0] == "6pm"
+    assert fill_ins[1] == "7:30pm"
+
+def test_message_parser_can_deal_with_empty_list():
+    message_body = "[time_suggestion_based_on_home_arrival_1, []]"
+
+    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db.setup()
+
+    uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
+
+    assert len(fill_ins) == 0
+    assert type(fill_ins) == list
+    assert uid == "time_suggestion_based_on_home_arrival_1"
+
+

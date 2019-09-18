@@ -37,13 +37,17 @@ class UserController(BDIAgent):
 
             self.agent.handle_io_response()
 
-            await asyncio.sleep(0.005)
+            await asyncio.sleep(0.002)
             # await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
             functor, args = parse_literal(message.body)
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")
+
+            x = list(message.body)
+            print(x)
+            print(type(x))
 
 
             utterance = self.agent.db.get(message.body)
@@ -52,6 +56,8 @@ class UserController(BDIAgent):
                 self.agent.io_queue_in.put(utterance)
             else:
                 log.error("no utterance received")
+
+        # def extract_utterance_and_variable_content
 
 
 
