@@ -3,7 +3,7 @@ Ava is an autonomous virtual assistant
 
 ## Installation
 ### 1. Prosody
-    1 Install Prosody via homebrew
+    1. Install Prosody via homebrew
 ```
 brew tap prosody/prosody 
 brew install prosody
