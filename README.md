@@ -3,14 +3,22 @@ Ava is an autonomous virtual assistant
 
 ## Installation
 ### 1. Prosody
-    1. Install Prosody via homebrew
+**Install Prosody via homebrew**
 ```
 brew tap prosody/prosody 
 brew install prosody
 ```
 Refer to https://prosody.im/download/start for details
 
-    1. The config file for prosody is most likely located in `/usr/local/etc/prosody
-/prosody.cfg.lua`
-    1. Add users to prosody with `prosodyctl adduser`
-    1. 
+**If needed edit the config file for SSL or domain settings**
+`/usr/local/etc/prosody/prosody.cfg.lua`
+
+**Add a user for each agent** 
+`prosodyctl adduser`
+
+**Start prosody**
+`prosodyctl start`
+
+### 2. Portaudio
+**`brew install portaudio`**
+
