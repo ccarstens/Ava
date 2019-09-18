@@ -1,6 +1,6 @@
 
 
 class Directive:
-    def __init__(self, eliciting_utterance, directions=None):
+    def __init__(self, eliciting_utterance, intents=None):
         self.utterance_id = eliciting_utterance
-        self.directions = directions
+        self.intents = intents if isinstance(intents, list) else [intents]

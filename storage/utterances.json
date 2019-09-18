@@ -5,14 +5,14 @@
             "expects_response": true
         },
         "time_suggestion_based_on_home_arrival_1": {
-            "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {home_arrival_time}, what do you think about going for dinner at {prop_option_1_time} then?",
+            "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {}, what do you think about going for dinner at {} then?",
             "expected_reactions": [
                 "confirm",
                 "reject"
             ]
         },
         "indicate_switch_to_other_person": {
-            "body": "Alright, I'll go talk to {dinner_contact_name} then.",
+            "body": "Alright, I'll go talk to {} then.",
             "expects_response": false,
             "expected_reactions": []
         }

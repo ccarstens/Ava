@@ -45,12 +45,9 @@ class UserController(BDIAgent):
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")
 
-            x = list(message.body)
-            print(x)
-            print(type(x))
 
 
-            utterance = self.agent.db.get(message.body)
+            utterance = self.agent.db.get_by_agent_string(message.body)
 
             if utterance is not None:
                 self.agent.io_queue_in.put(utterance)

@@ -9,17 +9,30 @@ class NLPController:
     def process(self, wit_data):
         utterance_id, wit_response = wit_data
 
+        intents = self.extract_intents(wit_response)
+        # todo extract named entities
+        return Directive(utterance_id, intents)
 
-        # print("\n\n")
-        # print(wit_response['entities'])
-        # print("\n\n")
-        # print(wit_response['entities']['intent'])
-        # print("\n\n")
-        # print(wit_response['entities']['intent'][0])
-        # print("\n\n")
-        # print(wit_response['entities']['intent'][0]['value'])
+    def extract_intents(self, wit_dict):
+        intent_array = self.keys_exists(wit_dict, "entities", "intent")
+        if not intent_array:
+            return "NO_INTENT_DETECTED"
+        else:
+            return [intent["value"] for intent in intent_array]
 
+    def keys_exists(self, element, *keys):
+        '''
+        Check if *keys (nested) exists in `element` (dict).
+        '''
+        if not isinstance(element, dict):
+            raise AttributeError('keys_exists() expects dict as first argument.')
+        if len(keys) == 0:
+            raise AttributeError('keys_exists() expects at least two arguments, one given.')
 
-        if wit_response['entities']['intent'][0]['value']:
-            intent = wit_response['entities']['intent'][0]['value']
-            return Directive(utterance_id, intent)
+        _element = element
+        for key in keys:
+            try:
+                _element = _element[key]
+            except KeyError:
+                return False
+        return _element
