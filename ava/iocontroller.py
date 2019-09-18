@@ -34,6 +34,7 @@ class IOController:
             except Empty:
                 pass
             except KeyboardInterrupt:
+                log.debug("keyboard interrupt")
                 break
 
 

@@ -37,6 +37,8 @@ class Environment:
         self.setup_ava()
         self.setup_user()
 
+        self.setup_exit()
+
         self.ava.bdi.set_singleton_belief("started", "yes")
         self.ava.bdi.add_achievement_goal("main")
 
@@ -45,7 +47,6 @@ class Environment:
         log.debug("stopping environment")
         self.ava.stop()
         self.user.stop()
-        self.stop_io()
 
     def setup_nlpc(self):
         self.nlpc = NLPController()
@@ -82,4 +83,12 @@ class Environment:
         io = IOController(queue_in, queue_out)
         io.run()
         pass
+
+    def setup_exit(self):
+        import signal, sys
+
+        def my_sig_handler(signal, frame):
+            log.debug("received interrupt signal")
+            sys.exit(0)
+        signal.signal(signal.SIGINT, my_sig_handler)
 
