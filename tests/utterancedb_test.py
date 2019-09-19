@@ -48,7 +48,7 @@ def test_if_conversion_from_dict_data_to_utterance_object_works_well():
     assert isinstance(utterance, Utterance)
     assert utterance.id == "hello_1"
     assert utterance.get_body() == "Hey this is me"
-    assert utterance.expects_response is True
+    assert utterance.expects_response() is True
 
 
 def test_if_conversion_works_if_no_expects_response_is_set():
@@ -60,7 +60,7 @@ def test_if_conversion_works_if_no_expects_response_is_set():
     assert isinstance(utterance, Utterance)
     assert utterance.id == "hello_1"
     assert utterance.get_body() == "Hey this is me"
-    assert utterance.expects_response is True
+    assert utterance.expects_response() is True
 
 
 def test_if_db_get_returns_a_valid_utterance_instance():

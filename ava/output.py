@@ -36,7 +36,7 @@ class Output:
         log.debug(f"finished speaking utterance {name}")
 
         utterance = self.db.get(name)
-        if utterance.expects_response:
+        if utterance.expects_response():
             self.input.listen(name)
         else:
             self.io_queue_out.put(("STATEMENT_FINISHED", utterance))

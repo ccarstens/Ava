@@ -26,6 +26,12 @@ def test_utterance_raises_if_placeholder_in_string_but_no_fill_ins():
         body = utterance.get_body()
 
 
+def test_expects_response_method_returns_correct_value():
+    utterance = Utterance("blank {}", "default", expects_response=True)
+
+    assert utterance.expects_response()
+
+
 def test_utterance_can_generate_a_statement_finished_belief():
     utterance = Utterance("blank {}", "default", expects_response=False)
 
@@ -37,3 +43,13 @@ def test_utterance_can_generate_a_statement_finished_belief():
     assert statement_finished_belief.args[0] == "default"
     assert isinstance(statement_finished_belief.args[1], Literal)
     assert statement_finished_belief.args[1].functor == "yes"
+
+
+
+
+def test_utterance_throws_error_if_expects_response_and_statement_finished_goal_is_generated():
+    utterance = Utterance("blank {}", "default")
+
+    with pytest.raises(UtteranceExpectsResponseException):
+        statement_finished_belief = utterance.to_statement_finished_belief()
+

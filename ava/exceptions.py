@@ -4,3 +4,7 @@ class MissingFillInsExceptions(Exception):
 
 class MissingAvaExcpetion(Exception):
     pass
+
+
+class UtteranceExpectsResponseException(Exception):
+    pass
