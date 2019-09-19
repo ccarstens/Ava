@@ -1,0 +1,22 @@
+{
+    "time": {
+        "suggestion": {
+            "default": {
+                "body": "blank {argument}",
+                "expects_response": true
+            }
+        }
+    },
+    "operational": {
+        "switch": {
+            "1": {
+                "body": "Alright, I'll go talk to {} then."
+            },
+            "2": {
+                "body": "Okay then. I'll go talk to {} and will be right back."
+            }
+        }
+    }
+}
+
+
