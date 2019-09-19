@@ -1,7 +1,7 @@
 //AVA
 {include("io_intentions.asl")}
 {include("time.asl")}
-!main.
+// !main gets called from environment
 
 
 

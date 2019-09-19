@@ -62,10 +62,10 @@ class UserController(BDIAgent):
 
     def handle_io_response(self):
         try:
-            response = self.io_queue_out.get_nowait()
-            if response:
-                log.debug(response)
-                flag, payload = response
+            directive = self.io_queue_out.get_nowait()
+            if directive:
+                log.debug(directive)
+                flag, payload = directive
                 if flag == "STATEMENT_FINISHED":
                     log.debug("statement finished")
                     utterance = payload
@@ -85,15 +85,15 @@ class UserController(BDIAgent):
                     utterance_id, wit_response = payload
                     log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
-                    response = self.nlpc.process(payload)
+                    directive = self.nlpc.process(payload)
+                    log.debug(f"received intents {directive.intents}")
+                    if directive.has_intents():
 
-                    log.debug(f"received directive {response.directions}")
+                        user_response_belief = self.nlpc.get_belief_from_directive(directive)
 
-                    user_response_belief = get_literal_from_functor_and_arguments(f"responded_{response.utterance_id}", (response.directions,))
-
-                    log.debug(dump(user_response_belief))
-
-                    self.bdi.add_achievement_goal("tell_ava", user_response_belief)
+                        self.bdi.add_achievement_goal("tell_ava", user_response_belief)
+                    else:
+                        log.error("no intents detected in user response")
 
         except Empty:
             pass

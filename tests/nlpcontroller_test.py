@@ -21,6 +21,7 @@ def test_nlpc_extracts_single_intent_from_dict():
     assert len(intents) == 1
     assert intents[0] == "confirmation"
 
+
 def test_nlpc_extracts_multiple_intents():
     wit_dict = {
     '_text': 'yeah that sounds good',
@@ -75,3 +76,12 @@ def test_process_method_extracts_intent_correctly_from_tuple():
 
     assert isinstance(directive, Directive)
     assert len(directive.intents) == 1
+
+
+
+def test_belief_generation_from_directive():
+    directive = Directive("default", "confirmation")
+    nlpc = NLPController()
+    belief = nlpc.get_belief_from_directive(directive)
+    print(str(belief))
+

@@ -14,6 +14,12 @@ confirmed(day, thursday).
     confirmed(day, Day);
     schedule(Day, arrival_home, ArrivalHome);
     suggestion_for_user(time, Day, Time);
-    !expect_response("time_suggestion_based_on_home_arrival_1", [ArrivalHome, Time], Response);
-    .log(Response, _).
+    !expect_response("time/suggestion/home_arrival_1", [ArrivalHome, Time]).
+    
++response <-
+    .log("generic received", _).
+    
++response("time/suggestion/home_arrival_1", confirmation, InputValues) <-
+    .log("confirmation received", _).
+
     
