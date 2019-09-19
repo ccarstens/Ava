@@ -56,6 +56,23 @@ class Environment:
         future_a = self.ava.start()
         future_a.result()
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
+        import agentspeak as asp
+        import agentspeak.runtime
+
+        trigger = asp.Trigger.addition
+        goal_type = asp.GoalType.belief
+
+
+        # literal = asp.LinkedList((39, ), ("d", ))
+        literal = asp.Literal("hello", ((39, "50"), (99, 100)))
+        print("\n\n")
+        print(literal)
+
+
+        self.ava.bdi_intention_buffer.append((trigger, goal_type, literal, asp.runtime.Intention()))
+
+        # self.ava.bdi.add_belief("my_test_belief", asp.Literal("confirmation"), (39, "degree"))
+
 
     def setup_user(self):
         self.user = UserController(self.user_jid, "ava", ASL_USER, self.io_queue_in, self.io_queue_out, self.nlpc, self.db)

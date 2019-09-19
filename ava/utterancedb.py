@@ -39,6 +39,7 @@ class UtteranceDB:
         )
 
     def extract_data_from_agent_message_string(self, message: str):
+        """[time/suggestion/home_arrival_1, [6pm, 7:30pm]]"""
         uid = re.match("^\[([a-z\/_\d]+)", message)
         fillins_list_string = re.match("^\[.*\[(.*)\]\]$", message).groups(0)[0]
 

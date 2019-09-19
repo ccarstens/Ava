@@ -32,5 +32,7 @@ def test_response_literal():
     assert isinstance(literal, asp.Literal)
     pass
 
+# def test_get_literal_from_functor
+
 
 

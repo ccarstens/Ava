@@ -41,6 +41,7 @@ class UserController(BDIAgent):
             # await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
+            log.critical(message.body)
             functor, args = parse_literal(message.body)
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")

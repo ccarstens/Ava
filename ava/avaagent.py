@@ -45,16 +45,7 @@ class AvaAgent(BDIAgent):
             await asyncio.sleep(0.002)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
-
-            functor, args = parse_literal(message.body)
-            args = args[0]
-
-            # handle communication with user here
-            # print("run: ", args[0])
-            # print("run: ", args[1])
-
-            # response = await ac.ainput("XX")
-            # self.add_achievement_goal("tell_va", response, source=message.sender)
+            pass
 
     async def setup(self):
         log.debug("Ava agent setup")
