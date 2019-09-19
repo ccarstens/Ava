@@ -1,10 +1,10 @@
 from ava.utterancedb import UtteranceDB
 from ava.utterance import Utterance
-from env import UTTERANCE_DB_FILE
+from env import UTTERANCE_DB_FILE_TESTING as DB_FILE
 
 
 def test_if_the_db_can_load_the_json_file():
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
 
     data = db.load_db_file()
 
@@ -14,7 +14,7 @@ def test_if_the_db_can_load_the_json_file():
 
 
 def test_if_db_can_flatten_the_dict_from_the_json_file():
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
 
     db.db_raw = db.load_db_file()
 
@@ -28,7 +28,7 @@ def test_if_db_can_flatten_the_dict_from_the_json_file():
 
 
 def test_if_setup_method_loads_utterances_correctly():
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
 
     db.setup()
 
@@ -39,7 +39,7 @@ def test_if_setup_method_loads_utterances_correctly():
 
 
 def test_if_conversion_from_dict_data_to_utterance_object_works_well():
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
 
     raw_data = ("hello_1", {"body": "Hey this is me", "expects_response": True})
 
@@ -52,7 +52,7 @@ def test_if_conversion_from_dict_data_to_utterance_object_works_well():
 
 
 def test_if_conversion_works_if_no_expects_response_is_set():
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
 
     raw_data = ("hello_1", {"body": "Hey this is me"})
 
@@ -64,7 +64,7 @@ def test_if_conversion_works_if_no_expects_response_is_set():
 
 
 def test_if_db_get_returns_a_valid_utterance_instance():
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
     db.setup()
 
     utterance = db.get("default")
@@ -76,7 +76,7 @@ def test_if_db_get_returns_a_valid_utterance_instance():
 def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body():
     message_body = "[time/suggestion/option_1, [6pm, 7:30pm]]"
 
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
     db.setup()
 
     uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
@@ -90,7 +90,7 @@ def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body()
 def test_message_parser_can_deal_with_empty_list():
     message_body = "[time_suggestion_based_on_home_arrival_1, []]"
 
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
     db.setup()
 
     uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
@@ -103,7 +103,7 @@ def test_message_parser_can_deal_with_empty_list():
 def test_get_by_agent_string_returns_utterance_instance_when_getting_a_well_formed_string():
     message_body = "[default, []]"
 
-    db = UtteranceDB(UTTERANCE_DB_FILE)
+    db = UtteranceDB(DB_FILE)
     db.setup()
 
     utterance = db.get_by_agent_string(message_body)
