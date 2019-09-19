@@ -45,8 +45,6 @@ def test_utterance_can_generate_a_statement_finished_belief():
     assert statement_finished_belief.args[1].functor == "yes"
 
 
-
-
 def test_utterance_throws_error_if_expects_response_and_statement_finished_goal_is_generated():
     utterance = Utterance("blank {}", "default")
 

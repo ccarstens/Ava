@@ -9,8 +9,8 @@ statement_iterator(0).
     usercontroller(UserJID);
     .send(UserJID, statement, [UtteranceID, FillIns]);
     -+statement_finished(UtteranceID, no);
-    statement_iterator(X);
     while(not statement_finished(UtteranceID, yes)){
+        statement_iterator(X);
         if(X mod 33 == 0){
             .log(".", _);
         }

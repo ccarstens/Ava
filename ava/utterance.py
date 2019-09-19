@@ -1,6 +1,7 @@
 from ava.exceptions import *
 from agentspeak import Literal
 
+
 class Utterance:
     def __init__(self, body, id, expects_response=True):
         self._body = body

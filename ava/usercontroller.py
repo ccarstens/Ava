@@ -71,7 +71,7 @@ class UserController(BDIAgent):
                     log.debug("statement finished")
                     utterance = payload
 
-
+                    self.ava.bdi.add_belief_literal(utterance.to_statement_finished_belief())
 
                     pass
                 elif flag == "RECEIVED_USER_RESPONSE":
