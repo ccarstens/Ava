@@ -22,7 +22,7 @@ if __name__ == '__main__':
                 y = env.ava.bdi.get_beliefs()
                 print(y)
                 
-            time.sleep(0.01)
+            time.sleep(0.002)
             x += 1
         except KeyboardInterrupt:
             env.stop()

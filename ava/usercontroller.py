@@ -37,21 +37,25 @@ class UserController(BDIAgent):
 
             self.agent.handle_io_response()
 
-            await asyncio.sleep(0.005)
+            await asyncio.sleep(0.002)
             # await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
+            log.critical(message.body)
             functor, args = parse_literal(message.body)
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")
 
 
-            utterance = self.agent.db.get(message.body)
+
+            utterance = self.agent.db.get_by_agent_string(message.body)
 
             if utterance is not None:
                 self.agent.io_queue_in.put(utterance)
             else:
                 log.error("no utterance received")
+
+        # def extract_utterance_and_variable_content
 
 
 
@@ -59,38 +63,28 @@ class UserController(BDIAgent):
 
     def handle_io_response(self):
         try:
-            response = self.io_queue_out.get_nowait()
-            if response:
-                log.debug(response)
-                flag, payload = response
+            directive = self.io_queue_out.get_nowait()
+            if directive:
+                log.debug(directive)
+                flag, payload = directive
                 if flag == "STATEMENT_FINISHED":
                     log.debug("statement finished")
                     utterance = payload
 
-                    context_literal = get_literal_from_functor_and_arguments("main")
-
-                    status_literal = get_literal_from_functor_and_arguments("yes")
-
-
-                    finished_belief = get_literal_from_functor_and_arguments("statement_finished", (utterance.id, context_literal, status_literal))
-
-
-                    self.bdi.add_achievement_goal("tell_ava", finished_belief)
+                    self.ava.bdi.add_belief_literal(utterance.to_statement_finished_belief())
 
                     pass
                 elif flag == "RECEIVED_USER_RESPONSE":
                     utterance_id, wit_response = payload
                     log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
-                    response = self.nlpc.process(payload)
-
-                    log.debug(f"received directive {response.directions}")
-
-                    user_response_belief = get_literal_from_functor_and_arguments(f"responded_{response.utterance_id}", (response.directions,))
-
-                    log.debug(dump(user_response_belief))
-
-                    self.bdi.add_achievement_goal("tell_ava", user_response_belief)
+                    directive = self.nlpc.process(payload)
+                    log.debug(f"received intents {directive.intents}")
+                    if directive.has_intents():
+                        response_literal = directive.to_response_belief()
+                        self.ava.bdi.add_belief_literal(response_literal)
+                    else:
+                        log.error("no intents detected in user response")
 
         except Empty:
             pass
@@ -103,6 +97,7 @@ class UserController(BDIAgent):
         self.nlpc = nlpc
         self.db = db
         self.active_utterance = None
+        self.ava = None
 
     async def setup(self):
         log.debug("User agent setup")

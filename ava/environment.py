@@ -5,7 +5,7 @@ from ava.usercontroller import UserController
 from multiprocessing import Process, Queue
 from ava.nlpcontroller import NLPController
 from ava.utterancedb import UtteranceDB
-
+from ava.exceptions import MissingAvaExcpetion
 
 class Environment:
     def __init__(self, agent_jid, user_controller_jid):
@@ -57,8 +57,14 @@ class Environment:
         future_a.result()
         self.ava.bdi.set_singleton_belief("usercontroller", self.user_jid)
 
+
     def setup_user(self):
         self.user = UserController(self.user_jid, "ava", ASL_USER, self.io_queue_in, self.io_queue_out, self.nlpc, self.db)
+        if self.ava:
+            self.user.ava = self.ava
+        else:
+            raise MissingAvaExcpetion
+
         future_u = self.user.start()
         future_u.result()
         self.user.bdi.set_singleton_belief("ava", self.ava_jid)

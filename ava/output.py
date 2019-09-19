@@ -29,14 +29,14 @@ class Output:
         self.synthesizer.connect('started-word', self.on_started_word)
 
     def speak(self, utterance: Utterance):
-        self.synthesizer.say(utterance.body, utterance.id)
+        self.synthesizer.say(utterance.get_body(), utterance.id)
         self.synthesizer.runAndWait()
 
     def on_finished_utterance(self, name, completed):
         log.debug(f"finished speaking utterance {name}")
 
         utterance = self.db.get(name)
-        if utterance.expects_response:
+        if utterance.expects_response():
             self.input.listen(name)
         else:
             self.io_queue_out.put(("STATEMENT_FINISHED", utterance))

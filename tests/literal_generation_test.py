@@ -24,3 +24,15 @@ def test_bdi_method_creates_literals_with_multiple_arguments():
     literal = get_literal_from_functor_and_arguments("hello", ("this", "is", "a", "test"))
     assert isinstance(literal, asp.Literal)
 
+
+def test_response_literal():
+
+    intents = [asp.Literal(intent) for intent in ["confirmation", "proposal"]]
+    literal = get_literal_from_functor_and_arguments("responded", ("default/hello_1", intents))
+    assert isinstance(literal, asp.Literal)
+    pass
+
+# def test_get_literal_from_functor
+
+
+

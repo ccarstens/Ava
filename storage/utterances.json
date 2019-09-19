@@ -1,38 +1,23 @@
 {
     "module_1": {
-
         "default": {
             "body": "blank {argument}",
             "expects_response": true
         },
-
-        "greeting_1": {
-        "body": "Hey {user_first_name}. it's good to hear you!",
-        "expects_response": false
+        "time/suggestion/home_arrival_1": {
+            "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {}, what do you think about going for dinner at {} then?",
+            "expected_reactions": [
+                "confirm",
+                "reject"
+            ]
         },
-
-        "greeting_2": {
-        "body": "Hey!",
-        "expects_response": false
-        },
-
-        "how_are_you_1": {
-        "body": "How are you today?",
-        "expects_response": true
-        },
-
-        "offer_help_1": {
-        "body": "What can I do for you?",
-        "expects_response": true
-        },
-
-        "tell_weather_1": {
-        "body": "It's currently sunny and 67 degrees in San Francisco.",
-        "expects_response": true
+        "operational/switch_person_1": {
+            "body": "Alright, I'll go talk to {} then.",
+            "expects_response": false,
+            "expected_reactions": []
         }
-},
+    },
     "module_2": {
-
         "statement_first_option_1": {
             "body": "The first option is: {option_1}.",
             "expects_response": false
