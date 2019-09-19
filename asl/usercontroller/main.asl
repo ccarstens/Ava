@@ -7,4 +7,4 @@
     .log("passing the following to ava", _);
     .log(Belief, _);
     ava(AvaJID);
-    .send(AvaJID, tell, Belief).
+    .send(AvaJID, tell_response, Belief).

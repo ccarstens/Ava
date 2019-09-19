@@ -78,10 +78,3 @@ def test_process_method_extracts_intent_correctly_from_tuple():
     assert len(directive.intents) == 1
 
 
-
-def test_belief_generation_from_directive():
-    directive = Directive("default", "confirmation")
-    nlpc = NLPController()
-    belief = nlpc.get_belief_from_directive(directive)
-    print(str(belief))
-

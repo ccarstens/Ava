@@ -1,6 +1,7 @@
 from ava.utterance import Utterance
 from ava.exceptions import *
 import pytest
+from agentspeak import Literal
 
 def test_utterance_can_replace_placeholders_in_body_with_fill_ins():
     utterance = Utterance("blank {}", "default")
@@ -23,3 +24,16 @@ def test_utterance_raises_if_placeholder_in_string_but_no_fill_ins():
 
     with pytest.raises(MissingFillInsExceptions):
         body = utterance.get_body()
+
+
+def test_utterance_can_generate_a_statement_finished_belief():
+    utterance = Utterance("blank {}", "default", expects_response=False)
+
+    statement_finished_belief = utterance.to_statement_finished_belief()
+
+    assert isinstance(statement_finished_belief, Literal)
+    assert statement_finished_belief.functor == "statement_finished"
+    assert len(statement_finished_belief.args) == 2
+    assert statement_finished_belief.args[0] == "default"
+    assert isinstance(statement_finished_belief.args[1], Literal)
+    assert statement_finished_belief.args[1].functor == "yes"

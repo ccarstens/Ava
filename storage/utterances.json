@@ -11,7 +11,7 @@
                 "reject"
             ]
         },
-        "indicate_switch_to_other_person": {
+        "operational/switch_person_1": {
             "body": "Alright, I'll go talk to {} then.",
             "expects_response": false,
             "expected_reactions": []

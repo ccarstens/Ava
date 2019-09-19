@@ -38,10 +38,3 @@ class NLPController:
             except KeyError:
                 return False
         return _element
-
-    def get_belief_from_directive(self, directive: Directive, functor="response"):
-        intent = asp.Literal(directive.intents[0])
-        input_values = ["8:30pm", 30]
-        literal = get_literal_from_functor_and_arguments(functor, (directive.utterance_id, intent, input_values))
-        return literal
-

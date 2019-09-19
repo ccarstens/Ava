@@ -7,9 +7,5 @@
 
 +!main <-
     .log("ava from asl", _);
-    .wait(3000);
-    hello(First, Second);
-    [A|B] = First;
-    .print(A);
-    .print(B);
+    .wait(1000);
     !find_time_option.

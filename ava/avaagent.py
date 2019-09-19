@@ -51,7 +51,7 @@ class AvaAgent(BDIAgent):
         log.debug("Ava agent setup")
         template = Template(metadata={"performative": "BDI"})
         personality = self.AvasPersonality()
-        personality.custom_ilf_types = ['expect_response', 'statement']
+        personality.custom_ilf_types = ['expect_response', 'statement', 'tell_response']
         self.add_behaviour(personality, template)
         personality.setup()
 

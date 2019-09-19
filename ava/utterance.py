@@ -1,5 +1,5 @@
 from ava.exceptions import *
-
+from agentspeak import Literal
 
 class Utterance:
     def __init__(self, body, id, expects_response=True):
@@ -8,6 +8,7 @@ class Utterance:
         self.expects_response = expects_response
         self.fill_ins = []
 
+    # todo add a check whether the number of placeholders matches the number of fill ins
     def get_body(self):
         if "{}" in self._body:
             if len(self.fill_ins):
@@ -16,3 +17,7 @@ class Utterance:
                 raise MissingFillInsExceptions
         else:
             return self._body
+
+    def to_statement_finished_belief(self):
+        yes_literal = Literal("yes")
+        return Literal("statement_finished", (self.id, yes_literal))

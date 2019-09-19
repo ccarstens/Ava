@@ -71,15 +71,7 @@ class UserController(BDIAgent):
                     log.debug("statement finished")
                     utterance = payload
 
-                    context_literal = get_literal_from_functor_and_arguments("main")
 
-                    status_literal = get_literal_from_functor_and_arguments("yes")
-
-
-                    finished_belief = get_literal_from_functor_and_arguments("statement_finished", (utterance.id, context_literal, status_literal))
-
-
-                    self.bdi.add_achievement_goal("tell_ava", finished_belief)
 
                     pass
                 elif flag == "RECEIVED_USER_RESPONSE":
@@ -89,10 +81,8 @@ class UserController(BDIAgent):
                     directive = self.nlpc.process(payload)
                     log.debug(f"received intents {directive.intents}")
                     if directive.has_intents():
-
-                        user_response_belief = self.nlpc.get_belief_from_directive(directive)
-
-                        self.bdi.add_achievement_goal("tell_ava", user_response_belief)
+                        response_literal = directive.to_response_belief()
+                        self.ava.bdi.add_belief_literal(response_literal)
                     else:
                         log.error("no intents detected in user response")
 
@@ -107,6 +97,7 @@ class UserController(BDIAgent):
         self.nlpc = nlpc
         self.db = db
         self.active_utterance = None
+        self.ava = None
 
     async def setup(self):
         log.debug("User agent setup")
