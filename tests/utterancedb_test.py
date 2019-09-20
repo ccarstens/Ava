@@ -141,7 +141,7 @@ def test_if_db_get_returns_a_valid_utterance_instance():
 def test_db_get_accepts_fill_ins():
     db = get_udb()
     utterance = db.get("standard/number_one", ["robert"])
-    assert utterance.fill_ins[0] == "robert"
+    assert utterance.get_fill_ins(0) == "robert"
 
 
 def test_incomplete_domain_string_returns_random_item_from_module():
@@ -208,8 +208,20 @@ def test_get_by_agent_string_returns_utterance_instance_when_getting_a_well_form
     utterance = db.get_by_agent_string(message_body)
 
     assert isinstance(utterance, Utterance)
-    assert utterance.fill_ins == []
+    assert utterance.get_fill_ins() == []
     assert utterance.id == "time/suggestion/default"
+
+
+def test_get_by_agent_string_returns_utterance_with_existing_fill_ins():
+    message_body = "[standard/number_one, [45, 69, Robert]]"
+
+    db = get_udb()
+
+    utterance = db.get_by_agent_string(message_body)
+
+    assert isinstance(utterance, Utterance)
+    assert utterance.get_fill_ins() == ["45", "69", "Robert"]
+    assert utterance.id == "standard/number_one"
 
 
 def test_udb_raises_excpetion_if_no_utterance_was_found():

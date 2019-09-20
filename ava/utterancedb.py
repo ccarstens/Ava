@@ -56,7 +56,7 @@ class UtteranceDB:
         if not utterance:
             raise UtteranceNotFoundException(domain_string)
 
-        utterance.fill_ins = fill_ins
+        utterance.set_fill_ins(fill_ins)
 
         self.history.push(utterance)
 
@@ -91,6 +91,5 @@ class UtteranceDB:
 
     def get_by_agent_string(self, message_string: str):
         utterance_id, fill_ins = self.extract_data_from_agent_message_string(message_string)
-        utterance = self.get(utterance_id)
-        utterance.fill_ins = fill_ins
+        utterance = self.get(utterance_id, fill_ins=fill_ins)
         return utterance

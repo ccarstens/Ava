@@ -5,7 +5,7 @@ from agentspeak import Literal
 
 def test_utterance_can_replace_placeholders_in_body_with_fill_ins():
     utterance = Utterance("blank {}", "default")
-    utterance.fill_ins = ["hello"]
+    utterance.set_fill_ins(["hello"])
 
     body = utterance.get_body()
     assert body == "blank hello"
@@ -56,4 +56,6 @@ def test_utterance_throws_error_if_expects_response_and_statement_finished_goal_
 def test_u_has_no_public_fill_ins_property():
     utterance = Utterance("blank {}", "default")
     assert not hasattr(utterance, "fill_ins")
+
+
 
