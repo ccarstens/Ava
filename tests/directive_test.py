@@ -1,6 +1,14 @@
 from ava.directive import *
 from agentspeak import Literal
 
+
+def test_directive_has_attr_for_storing_raw_wit_data():
+    directive = Directive("default", "confirmation")
+
+    assert hasattr(directive, "raw_wit_data")
+    assert isinstance(directive.raw_wit_data, dict)
+
+
 def test_directive_can_add_entities():
     directive = Directive("default", "confirmation")
 

@@ -1,8 +1,10 @@
 from ava.utterancedb import UtteranceDB
 from ava.utterance import Utterance
+from ava.exceptions import UtteranceModuleEmpty, UtteranceNotFoundException
+from ava.conversationhistory import ConversationHistory
 from env import UTTERANCE_DB_FILE_TESTING as DB_FILE
 import pytest
-from ava.exceptions import UtteranceModuleEmpty, UtteranceNotFoundException
+
 
 def test_if_the_db_can_load_the_json_file():
     db = UtteranceDB(DB_FILE)
@@ -231,10 +233,11 @@ def test_udb_raises_excpetion_if_no_utterance_was_found():
     with pytest.raises(UtteranceNotFoundException):
         utterance = db.get("this/is/missing")
 
+
 def test_udb_has_a_history():
     db = get_udb()
     assert hasattr(db, "history")
-    assert isinstance(db.history, list)
+    assert isinstance(db.history, ConversationHistory)
 
 
 

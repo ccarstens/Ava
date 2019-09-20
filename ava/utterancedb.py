@@ -4,15 +4,16 @@ from ava.utterance import Utterance
 import re
 from ava.exceptions import UtteranceModuleEmpty, UtteranceNotFoundException
 import random
-
+from ava.conversationhistory import ConversationHistory
 
 class UtteranceDB:
-    def __init__(self, db_file_path):
+    def __init__(self, db_file_path, conversation_history=ConversationHistory()):
         log.debug("init")
 
         self.db_raw = None
         self.db = None
         self.db_path = db_file_path
+        self.history = conversation_history
 
     def setup(self):
         self.db_raw = self.load_db_file()
