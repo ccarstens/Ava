@@ -16,6 +16,9 @@
                 "body": "Okay then. I'll go talk to {} and will be right back."
             }
         }
+    },
+    "default": {
+        "body": "blank {value}"
     }
 }
 

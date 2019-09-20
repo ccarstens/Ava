@@ -1,7 +1,8 @@
 from ava.utterancedb import UtteranceDB
 from ava.utterance import Utterance
 from env import UTTERANCE_DB_FILE_TESTING as DB_FILE
-
+import pytest
+from ava.exceptions import UtteranceModuleEmpty
 
 def test_if_the_db_can_load_the_json_file():
     db = UtteranceDB(DB_FILE)
@@ -13,40 +14,84 @@ def test_if_the_db_can_load_the_json_file():
     assert isinstance(data, dict)
 
 
-def test_if_db_can_flatten_the_dict_from_the_json_file():
+def test_contains_module_returns_true_if_dict_contains_another_module_not_utterances():
     db = UtteranceDB(DB_FILE)
 
-    db.db_raw = db.load_db_file()
+    module = {"time": {
+        "suggestion": {
+            "number_one": {
+                "body": "this is my time suggestion"
+            }
+        }
+    }}
 
-    assert db.db_raw is not None
-
-    db.setup_flattened_db()
-
-    assert db.db is not None
-    assert len(db.db) > 0
-    assert isinstance(db.db[0], Utterance)
+    assert db.is_module(module) is True
+    assert db.is_module(module["time"]) is True
+    assert db.is_module(module["time"]["suggestion"]) is True
+    assert db.is_module(module["time"]["suggestion"]["number_one"]) is False
 
 
-def test_if_setup_method_loads_utterances_correctly():
+
+def test_recursive_processing():
     db = UtteranceDB(DB_FILE)
+    db.db_raw = {"time": {
+                "suggestion": {
+                    "number_one": {
+                        "body": "this is my time suggestion"
+                    }
+                }
+            },
+            "place": {
+                "suggestion": {
+                    "number_one": {
+                        "body": "this is my place suggestion"
+                    }
+                }
+            }}
 
-    db.setup()
+    result = db.process_modules()
 
-    assert db.db_raw is not None
-    assert db.db is not None
-    assert len(db.db) > 0
-    assert isinstance(db.db[0], Utterance)
+    assert isinstance(result[0], Utterance)
+    assert result[0].id == "time/suggestion/number_one"
+    assert result[1].id == "place/suggestion/number_one"
+    assert result[0].get_body() == "this is my time suggestion"
+    assert result[1].get_body() == "this is my place suggestion"
+
+
+def test_processing_of_multiple_dimensions():
+    db = UtteranceDB(DB_FILE)
+    db.db_raw = {"time": {
+                "suggestion": {
+                    "sub_module": {
+                        "another_module": {
+                            "number_one": {
+                                "body": "this is my time suggestion one"
+                            },
+                            "number_two": {
+                                "body": "this is my time suggestion two"
+                            },
+                            "number_three": {
+                                "body": "this is my time suggestion three"
+                            },
+                        }
+                    }
+                }
+            }}
+
+    utterances = db.process_modules()
+    assert utterances[0].id == "time/suggestion/sub_module/another_module/number_one"
+    assert utterances[1].id == "time/suggestion/sub_module/another_module/number_two"
+    assert utterances[2].id == "time/suggestion/sub_module/another_module/number_three"
+
+
 
 
 def test_if_conversion_from_dict_data_to_utterance_object_works_well():
     db = UtteranceDB(DB_FILE)
-
-    raw_data = ("hello_1", {"body": "Hey this is me", "expects_response": True})
-
-    utterance = db.transform(raw_data)
+    utterance = db.transform("time/suggestions/number_one", {"body": "Hey this is me", "expects_response": True})
 
     assert isinstance(utterance, Utterance)
-    assert utterance.id == "hello_1"
+    assert utterance.id == "time/suggestions/number_one"
     assert utterance.get_body() == "Hey this is me"
     assert utterance.expects_response() is True
 
@@ -54,9 +99,8 @@ def test_if_conversion_from_dict_data_to_utterance_object_works_well():
 def test_if_conversion_works_if_no_expects_response_is_set():
     db = UtteranceDB(DB_FILE)
 
-    raw_data = ("hello_1", {"body": "Hey this is me"})
 
-    utterance = db.transform(raw_data)
+    utterance = db.transform("hello_1", {"body": "Hey this is me"})
     assert isinstance(utterance, Utterance)
     assert utterance.id == "hello_1"
     assert utterance.get_body() == "Hey this is me"
@@ -65,12 +109,60 @@ def test_if_conversion_works_if_no_expects_response_is_set():
 
 def test_if_db_get_returns_a_valid_utterance_instance():
     db = UtteranceDB(DB_FILE)
-    db.setup()
+    db.db_raw = {"time": {
+        "suggestion": {
+            "sub_module": {
+                "another_module": {
+                    "number_one": {
+                        "body": "this is my time suggestion one"
+                    },
+                    "number_two": {
+                        "body": "this is my time suggestion two"
+                    },
+                    "number_three": {
+                        "body": "this is my time suggestion three"
+                    },
+                }
+            }
+        }
+    }}
+    db.db = db.process_modules()
 
-    utterance = db.get("default")
+
+    utterance = db.get("time/suggestion/sub_module/another_module/number_one")
 
     assert isinstance(utterance, Utterance)
-    assert utterance.id == "default"
+    assert utterance.id == "time/suggestion/sub_module/another_module/number_one"
+    assert utterance.get_body() == "this is my time suggestion one"
+
+
+
+def test_incomplete_domain_string_returns_random_item_from_module():
+    db = UtteranceDB(DB_FILE)
+    db.db_raw = {"time": {
+        "suggestion": {
+            "sub_module": {
+                "another_module": {
+                    "number_one": {
+                        "body": "this is my time suggestion one"
+                    },
+                    "number_two": {
+                        "body": "this is my time suggestion two"
+                    },
+                    "number_three": {
+                        "body": "this is my time suggestion three"
+                    },
+                }
+            }
+        }
+    }}
+    db.db = db.process_modules()
+
+    random_utterance = db.get("time/suggestion/sub_module/another_module")
+    assert isinstance(random_utterance, Utterance)
+
+
+
 
 
 def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body():

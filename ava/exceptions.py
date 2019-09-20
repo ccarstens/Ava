@@ -8,3 +8,7 @@ class MissingAvaExcpetion(Exception):
 
 class UtteranceExpectsResponseException(Exception):
     pass
+
+
+class UtteranceModuleEmpty(Exception):
+    pass
