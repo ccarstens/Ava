@@ -16,6 +16,7 @@ class IOController:
         self.queue_in = queue_in
         self.queue_out = queue_out
         self.db = None
+        self.utterance_history = []
         self.setup_db()
         self.setup_input()
         self.setup_output()
@@ -27,8 +28,10 @@ class IOController:
             try:
                 utterance = self.queue_in.get_nowait()
                 if utterance:
-
+                    utterance.identifier = "this was set in IOC"
+                    log.critical("set it")
                     log.debug(f"got incoming request {utterance.id}")
+                    self.utterance_history.append(utterance)
                     self.chat(utterance)
 
             except Empty:
@@ -50,6 +53,12 @@ class IOController:
 
     def chat(self, utterance: Utterance):
         self.output.speak(utterance)
+
+    # def history_to_id_list(self):
+    #     return []
+    #
+    # def stop(self):
+
 
 
 

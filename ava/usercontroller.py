@@ -52,6 +52,8 @@ class UserController(BDIAgent):
 
             if utterance is not None:
                 self.agent.io_queue_in.put(utterance)
+                await asyncio.sleep(3)
+                log.critical(f"here {utterance.identifier}")
             else:
                 log.error("no utterance received")
 

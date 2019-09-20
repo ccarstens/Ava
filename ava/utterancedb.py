@@ -2,7 +2,7 @@ from log import log_udb as log, dump
 import json
 from ava.utterance import Utterance
 import re
-from ava.exceptions import UtteranceModuleEmpty
+from ava.exceptions import UtteranceModuleEmpty, UtteranceNotFoundException
 import random
 
 
@@ -48,8 +48,10 @@ class UtteranceDB:
         matches = [utterance for utterance in self.db if domain_string in utterance.id]
         if len(matches) == 1:
             return matches[0]
-        else:
+        elif len(matches) > 1:
             return random.choice(matches)
+        else:
+            raise UtteranceNotFoundException(domain_string)
 
 
     def transform(self, id, data):

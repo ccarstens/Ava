@@ -40,7 +40,8 @@ class Environment:
         self.setup_exit()
 
         self.ava.bdi.set_singleton_belief("started", "yes")
-        self.ava.bdi.add_achievement_goal("main")
+        # self.ava.bdi.add_achievement_goal("main")
+        self.ava.bdi.add_achievement_goal("capture_user_speech")
 
 
     def stop(self):

@@ -5,6 +5,9 @@ statement_iterator(0).
     usercontroller(UserJID);
     .send(UserJID, expect_response, [UtteranceID, FillIns]).
 
++!expect_response(UtteranceID) <-
+    !expect_response(UtteranceID, []).
+
 +!statement(UtteranceID, FillIns) <-
     usercontroller(UserJID);
     .send(UserJID, statement, [UtteranceID, FillIns]);

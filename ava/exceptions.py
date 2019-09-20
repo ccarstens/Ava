@@ -12,3 +12,6 @@ class UtteranceExpectsResponseException(Exception):
 
 class UtteranceModuleEmpty(Exception):
     pass
+
+class UtteranceNotFoundException(Exception):
+    pass

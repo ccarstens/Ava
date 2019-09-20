@@ -1,12 +1,21 @@
 {
     "default": {
-        "body": "blank {value}"
+        "blank": {
+            "body": "blank {value}"
+        },
+        "prompt": {
+            "body": "Speak."
+        }
     },
     "operational": {
         "switch_person_1": {
             "body": "Alright, I'll go talk to {} then.",
             "expects_response": false,
             "expected_reactions": []
+        },
+        "offer_help_1": {
+            "body": "Hey {}, what can I do for you?",
+            "expected_reactions": ["query_dinner", "rejection"]
         }
     },
     "time": {

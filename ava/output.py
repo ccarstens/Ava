@@ -9,8 +9,8 @@ from multiprocessing import Queue
 class Output:
     def __init__(self, input: Input, db: UtteranceDB, io_queue_out: Queue):
         self.synthesizer = pyttsx3.init(debug=True)
-        self.voice = list(filter(lambda sv: ('Tracy' in sv.name),
-                                 self.synthesizer.getProperty('voices')))[0]
+
+        self.voice = [voice for voice in self.synthesizer.getProperty('voices') if "Tracy" in voice.name][0]
         self.synthesizer.setProperty('voice', self.voice.id)
         self.synthesizer.setProperty('rate', 175)
 
@@ -43,8 +43,3 @@ class Output:
 
     def on_started_word(self, name, location, length):
         pass
-
-    def killme(self, synth):
-        print("killme")
-        synth.endLoop()
-

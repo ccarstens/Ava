@@ -8,6 +8,7 @@ class Utterance:
         self.id = id
         self._expects_response = expects_response
         self.fill_ins = []
+        self.identifier = None
 
     # todo add a check whether the number of placeholders matches the number of fill ins
     def get_body(self):
