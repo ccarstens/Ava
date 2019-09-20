@@ -240,6 +240,13 @@ def test_udb_has_a_history():
     assert isinstance(db.history, ConversationHistory)
 
 
+def test_udb_stores_utterance_in_history_when_getting():
+    db = get_udb()
+
+    utterance = db.get("suggestion/sub_module/another_module/number_one")
+
+    assert isinstance(db.history.get_last_utterance(), Utterance)
+    assert db.history.get_last_utterance().id == "suggestion/sub_module/another_module/number_one"
 
 
 def get_udb():
