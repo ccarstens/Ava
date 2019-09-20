@@ -138,6 +138,11 @@ def test_if_db_get_returns_a_valid_utterance_instance():
     assert utterance.get_body() == "this is my time suggestion one"
 
 
+def test_db_get_accepts_fill_ins():
+    db = get_udb()
+    utterance = db.get("standard/number_one", ["robert"])
+    assert utterance.fill_ins[0] == "robert"
+
 
 def test_incomplete_domain_string_returns_random_item_from_module():
     db = UtteranceDB(DB_FILE)
@@ -243,31 +248,38 @@ def test_udb_has_a_history():
 def test_udb_stores_utterance_in_history_when_getting():
     db = get_udb()
 
-    utterance = db.get("suggestion/sub_module/another_module/number_one")
+    utterance = db.get("time/suggestion/sub_module/another_module/number_one")
 
     assert isinstance(db.history.get_last_utterance(), Utterance)
-    assert db.history.get_last_utterance().id == "suggestion/sub_module/another_module/number_one"
+    assert db.history.get_last_utterance().id == "time/suggestion/sub_module/another_module/number_one"
 
 
 def get_udb():
     db = UtteranceDB(DB_FILE)
-    db.db_raw = {"time": {
-        "suggestion": {
-            "sub_module": {
-                "another_module": {
-                    "number_one": {
-                        "body": "this is my time suggestion one"
-                    },
-                    "number_two": {
-                        "body": "this is my time suggestion two"
-                    },
-                    "number_three": {
-                        "body": "this is my time suggestion three"
-                    },
+    db.db_raw = {
+        "time": {
+            "suggestion": {
+                "sub_module": {
+                    "another_module": {
+                        "number_one": {
+                            "body": "this is my time suggestion one"
+                        },
+                        "number_two": {
+                            "body": "this is my time suggestion two"
+                        },
+                        "number_three": {
+                            "body": "this is my time suggestion three"
+                        },
+                    }
                 }
             }
+        },
+        "standard": {
+            "number_one": {
+                "body": "this is a sample"
+            }
         }
-    }}
+    }
     db.db = db.process_modules()
     return db
 

@@ -45,14 +45,24 @@ class UtteranceDB:
         return process_layer("", self.db_raw)
 
 
-    def get(self, domain_string):
+    def get(self, domain_string, fill_ins=[]):
         matches = [utterance for utterance in self.db if domain_string in utterance.id]
+        utterance = None
         if len(matches) == 1:
-            return matches[0]
+            utterance = matches[0]
         elif len(matches) > 1:
-            return random.choice(matches)
-        else:
+            utterance = random.choice(matches)
+
+        if not utterance:
             raise UtteranceNotFoundException(domain_string)
+
+        utterance.fill_ins = fill_ins
+
+        self.history.push(utterance)
+
+        return utterance
+
+
 
 
     def transform(self, id, data):
