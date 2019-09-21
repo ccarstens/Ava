@@ -1,9 +1,10 @@
 import logging
 from definitions import *
-from datetime import datetime
+from env import *
 import pprint
 
-LOGFILE = f"{datetime.now(tz=None)}.log"
+
+LOGFILE = f"{GLOBAL_START_TIME}.log"
 
 
 def get_logger(classname):

@@ -13,7 +13,9 @@ class NLPController:
 
         intents = self.extract_intents(wit_response)
         # todo extract named entities
-        return Directive(utterance_id, intents)
+        directive = Directive(utterance_id, intents)
+        directive.raw_wit_data = wit_response
+        return directive
 
     def extract_intents(self, wit_dict):
         intent_array = self.keys_exists(wit_dict, "entities", "intent")

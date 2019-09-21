@@ -1,6 +1,7 @@
 from log import log_ch as log
 from ava.utterance import Utterance
 from ava.directive import Directive
+from env import *
 
 
 class ConversationHistory:
@@ -31,3 +32,13 @@ class ConversationHistory:
             elif hasattr(obj, "id") and uid and obj.id == uid:
                 return obj
 
+
+    def serialize(self, file=None):
+        import pickle
+
+
+        if file is None:
+            file = f"{GLOBAL_START_TIME}.obj"
+
+        filehandler = open(CONVERSATION_FOLDER + file, 'wb')
+        pickle.dump(self.history, filehandler)

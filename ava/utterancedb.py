@@ -63,8 +63,6 @@ class UtteranceDB:
         return utterance
 
 
-
-
     def transform(self, id, data):
         return Utterance(
             id=id,
@@ -93,3 +91,7 @@ class UtteranceDB:
         utterance_id, fill_ins = self.extract_data_from_agent_message_string(message_string)
         utterance = self.get(utterance_id, fill_ins=fill_ins)
         return utterance
+
+    def stop(self):
+        log.debug("stopping db")
+        self.history.serialize()

@@ -65,10 +65,10 @@ class UserController(BDIAgent):
 
     def handle_io_response(self):
         try:
-            directive = self.io_queue_out.get_nowait()
-            if directive:
-                log.debug(directive)
-                flag, payload = directive
+            response_from_ioc = self.io_queue_out.get_nowait()
+            if response_from_ioc:
+                log.debug(response_from_ioc)
+                flag, payload = response_from_ioc
                 if flag == "STATEMENT_FINISHED":
                     log.debug("statement finished")
                     utterance = payload
@@ -81,6 +81,7 @@ class UserController(BDIAgent):
                     log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
                     directive = self.nlpc.process(payload)
+                    self.db.history.push(directive)
                     log.debug(f"received intents {directive.intents}")
                     if directive.has_intents():
                         response_literal = directive.to_response_belief()

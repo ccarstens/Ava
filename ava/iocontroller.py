@@ -28,8 +28,6 @@ class IOController:
             try:
                 utterance = self.queue_in.get_nowait()
                 if utterance:
-                    utterance.identifier = "this was set in IOC"
-                    log.critical("set it")
                     log.debug(f"got incoming request {utterance.id}")
                     self.utterance_history.append(utterance)
                     self.chat(utterance)
@@ -45,7 +43,7 @@ class IOController:
         self.input = Input(self.queue_out)
 
     def setup_output(self):
-        self.output = Output(self.input, self.db, self.queue_out)
+        self.output = Output(self.input, self.utterance_history, self.queue_out)
 
     def setup_db(self):
         self.db = UtteranceDB(UTTERANCE_DB_FILE)

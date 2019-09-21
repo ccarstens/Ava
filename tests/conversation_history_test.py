@@ -1,7 +1,8 @@
 from ava.conversationhistory import ConversationHistory
 from ava.utterance import Utterance
 from ava.directive import Directive
-import pytest
+import pytest, pickle
+from env import *
 
 def test_ch_has_list_representing_the_history():
     ch = ConversationHistory()
@@ -85,3 +86,16 @@ def test_ch_can_get_last_utterance_based_on_id():
 
     assert isinstance(utterance, Utterance)
     assert utterance.get_body() == "this one got repeated"
+
+
+
+def test_serialize():
+
+    ch = ConversationHistory()
+    ch.push(Utterance("this is the first one", "number/one"))
+    ch.serialize("test.obj")
+
+    file = open(CONVERSATION_FOLDER + "test.obj", "rb")
+    history = pickle.load(file)
+
+    assert isinstance(history[0], Utterance)
