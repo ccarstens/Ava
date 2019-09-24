@@ -78,3 +78,23 @@ def test_process_method_extracts_intent_correctly_from_tuple():
     assert len(directive.intents) == 1
 
 
+def test_directive_contains_wit_data_when_created_by_nlpc():
+    wit_dict = {
+    '_text': 'yeah that sounds good',
+    'entities': {
+        'intent': [{
+            'confidence': 0.82693723532401,
+            'value': 'confirmation'
+        }]
+    },
+    'msg_id': '1yoIkxVstxREydBbY'}
+    response = ("default", wit_dict)
+
+    nlpc = NLPController()
+
+    directive = nlpc.process(response)
+
+    assert hasattr(directive, "raw_wit_data")
+    assert directive.raw_wit_data["_text"] == "yeah that sounds good"
+
+

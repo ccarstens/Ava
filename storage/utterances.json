@@ -1,26 +1,32 @@
 {
-    "module_1": {
-        "default": {
-            "body": "blank {argument}",
-            "expects_response": true
+    "default": {
+        "blank": {
+            "body": "blank {value}"
         },
-        "time/suggestion/home_arrival_1": {
-            "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {}, what do you think about going for dinner at {} then?",
-            "expected_reactions": [
-                "confirm",
-                "reject"
-            ]
-        },
-        "operational/switch_person_1": {
+        "prompt": {
+            "body": "Speak."
+        }
+    },
+    "operational": {
+        "switch_person_1": {
             "body": "Alright, I'll go talk to {} then.",
             "expects_response": false,
             "expected_reactions": []
+        },
+        "offer_help_1": {
+            "body": "Hey {}, what can I do for you?",
+            "expected_reactions": ["query_dinner", "rejection"]
         }
     },
-    "module_2": {
-        "statement_first_option_1": {
-            "body": "The first option is: {option_1}.",
-            "expects_response": false
+    "time": {
+        "suggestion": {
+            "home_arrival_1": {
+                "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {}, what do you think about going for dinner at {} then?",
+                "expected_reactions": [
+                    "confirm",
+                    "reject"
+                ]
+            }
         }
     }
 }

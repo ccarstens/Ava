@@ -41,12 +41,15 @@ class Environment:
 
         self.ava.bdi.set_singleton_belief("started", "yes")
         self.ava.bdi.add_achievement_goal("main")
+        # self.ava.bdi.add_achievement_goal("capture_user_speech")
 
 
     def stop(self):
         log.debug("stopping environment")
         self.ava.stop()
         self.user.stop()
+
+        self.db.stop()
 
     def setup_nlpc(self):
         self.nlpc = NLPController()
@@ -94,6 +97,7 @@ class Environment:
         import signal, sys
 
         def my_sig_handler(signal, frame):
+            self.stop()
             log.debug("received interrupt signal")
             sys.exit(0)
         signal.signal(signal.SIGINT, my_sig_handler)

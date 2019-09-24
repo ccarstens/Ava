@@ -2,36 +2,68 @@ from log import log_udb as log, dump
 import json
 from ava.utterance import Utterance
 import re
-
+from ava.exceptions import UtteranceModuleEmpty, UtteranceNotFoundException
+import random
+from ava.conversationhistory import ConversationHistory
 
 class UtteranceDB:
-    def __init__(self, db_file_path):
+    def __init__(self, db_file_path, conversation_history=ConversationHistory()):
         log.debug("init")
 
         self.db_raw = None
         self.db = None
         self.db_path = db_file_path
+        self.history = conversation_history
 
     def setup(self):
         self.db_raw = self.load_db_file()
-        self.setup_flattened_db()
+        self.db = self.process_modules()
 
     def load_db_file(self):
         with open(self.db_path) as file:
             return json.load(file)
 
-    def setup_flattened_db(self):
-        if self.db_raw:
-            self.db = []
-            for module, utterances in self.db_raw.items():
-                for utterance in utterances.items():
-                    self.db.append(self.transform(utterance))
 
-    def get(self, utterance_id):
-        return next((utterance for utterance in self.db if utterance.id == utterance_id), None)
+    def is_module(self, module: dict):
+        if len(list(module.keys())) > 0:
+            return "body" not in list(module.keys())
 
-    def transform(self, utterance_data: tuple):
-        id, data = utterance_data
+
+    def process_modules(self):
+        def get_domain_string(domain_string, route):
+            separator = "/"
+            return f"{domain_string}{separator}{route}"
+
+        def process_layer(domain_string, module_layer: dict):
+            tmp = []
+            for route, module_values in module_layer.items():
+                if self.is_module(module_values):
+                    tmp += process_layer(get_domain_string(domain_string, route), module_values)
+                else:
+                    tmp.append(self.transform(get_domain_string(domain_string, route), module_values))
+            return tmp
+        return process_layer("", self.db_raw)
+
+
+    def get(self, domain_string, fill_ins=[]):
+        matches = [utterance for utterance in self.db if domain_string in utterance.id]
+        utterance = None
+        if len(matches) == 1:
+            utterance = matches[0]
+        elif len(matches) > 1:
+            utterance = random.choice(matches)
+
+        if not utterance:
+            raise UtteranceNotFoundException(domain_string)
+
+        utterance.set_fill_ins(fill_ins)
+
+        self.history.push(utterance)
+
+        return utterance
+
+
+    def transform(self, id, data):
         return Utterance(
             id=id,
             body=data["body"],
@@ -57,6 +89,9 @@ class UtteranceDB:
 
     def get_by_agent_string(self, message_string: str):
         utterance_id, fill_ins = self.extract_data_from_agent_message_string(message_string)
-        utterance = self.get(utterance_id)
-        utterance.fill_ins = fill_ins
+        utterance = self.get(utterance_id, fill_ins=fill_ins)
         return utterance
+
+    def stop(self):
+        log.debug("stopping db")
+        self.history.serialize()
