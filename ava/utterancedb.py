@@ -31,7 +31,7 @@ class UtteranceDB:
 
     def process_modules(self):
         def get_domain_string(domain_string, route):
-            separator = "/" if len(domain_string) else ""
+            separator = "/"
             return f"{domain_string}{separator}{route}"
 
         def process_layer(domain_string, module_layer: dict):

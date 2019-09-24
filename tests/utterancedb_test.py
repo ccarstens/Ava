@@ -54,8 +54,8 @@ def test_recursive_processing():
     result = db.process_modules()
 
     assert isinstance(result[0], Utterance)
-    assert result[0].id == "time/suggestion/number_one"
-    assert result[1].id == "place/suggestion/number_one"
+    assert result[0].id == "/time/suggestion/number_one"
+    assert result[1].id == "/place/suggestion/number_one"
     assert result[0].get_body() == "this is my time suggestion"
     assert result[1].get_body() == "this is my place suggestion"
 
@@ -81,9 +81,9 @@ def test_processing_of_multiple_dimensions():
             }}
 
     utterances = db.process_modules()
-    assert utterances[0].id == "time/suggestion/sub_module/another_module/number_one"
-    assert utterances[1].id == "time/suggestion/sub_module/another_module/number_two"
-    assert utterances[2].id == "time/suggestion/sub_module/another_module/number_three"
+    assert utterances[0].id == "/time/suggestion/sub_module/another_module/number_one"
+    assert utterances[1].id == "/time/suggestion/sub_module/another_module/number_two"
+    assert utterances[2].id == "/time/suggestion/sub_module/another_module/number_three"
 
 
 
@@ -102,9 +102,9 @@ def test_if_conversion_works_if_no_expects_response_is_set():
     db = UtteranceDB(DB_FILE)
 
 
-    utterance = db.transform("hello_1", {"body": "Hey this is me"})
+    utterance = db.transform("/hello_1", {"body": "Hey this is me"})
     assert isinstance(utterance, Utterance)
-    assert utterance.id == "hello_1"
+    assert utterance.id == "/hello_1"
     assert utterance.get_body() == "Hey this is me"
     assert utterance.expects_response() is True
 
@@ -131,16 +131,16 @@ def test_if_db_get_returns_a_valid_utterance_instance():
     db.db = db.process_modules()
 
 
-    utterance = db.get("time/suggestion/sub_module/another_module/number_one")
+    utterance = db.get("/time/suggestion/sub_module/another_module/number_one")
 
     assert isinstance(utterance, Utterance)
-    assert utterance.id == "time/suggestion/sub_module/another_module/number_one"
+    assert utterance.id == "/time/suggestion/sub_module/another_module/number_one"
     assert utterance.get_body() == "this is my time suggestion one"
 
 
 def test_db_get_accepts_fill_ins():
     db = get_udb()
-    utterance = db.get("standard/number_one", ["robert"])
+    utterance = db.get("/standard/number_one", ["robert"])
     assert utterance.get_fill_ins(0) == "robert"
 
 
@@ -165,7 +165,7 @@ def test_incomplete_domain_string_returns_random_item_from_module():
     }}
     db.db = db.process_modules()
 
-    random_utterance = db.get("time/suggestion/sub_module/another_module")
+    random_utterance = db.get("/time/suggestion/sub_module/another_module")
     assert isinstance(random_utterance, Utterance)
 
 
@@ -173,7 +173,7 @@ def test_incomplete_domain_string_returns_random_item_from_module():
 
 
 def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body():
-    message_body = "[time/suggestion/option_1, [6pm, 7:30pm]]"
+    message_body = "[/time/suggestion/option_1, [6pm, 7:30pm]]"
 
     db = UtteranceDB(DB_FILE)
     db.setup()
@@ -181,13 +181,13 @@ def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body()
     uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
 
     assert len(fill_ins) == 2
-    assert uid == "time/suggestion/option_1"
+    assert uid == "/time/suggestion/option_1"
     assert fill_ins[0] == "6pm"
     assert fill_ins[1] == "7:30pm"
 
 
 def test_message_parser_can_deal_with_empty_list():
-    message_body = "[time_suggestion_based_on_home_arrival_1, []]"
+    message_body = "[/time_suggestion_based_on_home_arrival_1, []]"
 
     db = UtteranceDB(DB_FILE)
     db.setup()
@@ -196,11 +196,11 @@ def test_message_parser_can_deal_with_empty_list():
 
     assert len(fill_ins) == 0
     assert type(fill_ins) == list
-    assert uid == "time_suggestion_based_on_home_arrival_1"
+    assert uid == "/time_suggestion_based_on_home_arrival_1"
 
 
 def test_get_by_agent_string_returns_utterance_instance_when_getting_a_well_formed_string():
-    message_body = "[time/suggestion/default, []]"
+    message_body = "[/time/suggestion/default, []]"
 
     db = UtteranceDB(DB_FILE)
     db.setup()
@@ -209,11 +209,11 @@ def test_get_by_agent_string_returns_utterance_instance_when_getting_a_well_form
 
     assert isinstance(utterance, Utterance)
     assert utterance.get_fill_ins() == []
-    assert utterance.id == "time/suggestion/default"
+    assert utterance.id == "/time/suggestion/default"
 
 
 def test_get_by_agent_string_returns_utterance_with_existing_fill_ins():
-    message_body = "[standard/number_one, [45, 69, Robert]]"
+    message_body = "[/standard/number_one, [45, 69, Robert]]"
 
     db = get_udb()
 
@@ -221,7 +221,7 @@ def test_get_by_agent_string_returns_utterance_with_existing_fill_ins():
 
     assert isinstance(utterance, Utterance)
     assert utterance.get_fill_ins() == ["45", "69", "Robert"]
-    assert utterance.id == "standard/number_one"
+    assert utterance.id == "/standard/number_one"
 
 
 def test_udb_raises_excpetion_if_no_utterance_was_found():
@@ -248,7 +248,7 @@ def test_udb_raises_excpetion_if_no_utterance_was_found():
 
 
     with pytest.raises(UtteranceNotFoundException):
-        utterance = db.get("this/is/missing")
+        utterance = db.get("/this/is/missing")
 
 
 def test_udb_has_a_history():
@@ -260,10 +260,11 @@ def test_udb_has_a_history():
 def test_udb_stores_utterance_in_history_when_getting():
     db = get_udb()
 
-    utterance = db.get("time/suggestion/sub_module/another_module/number_one")
+    utterance = db.get("/time/suggestion/sub_module/another_module/number_one")
 
     assert isinstance(db.history.get_last_utterance(), Utterance)
-    assert db.history.get_last_utterance().id == "time/suggestion/sub_module/another_module/number_one"
+    assert db.history.get_last_utterance().id == "/time/suggestion/sub_module/another_module/number_one"
+
 
 
 def get_udb():
