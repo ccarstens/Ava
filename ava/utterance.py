@@ -3,10 +3,10 @@ from agentspeak import Literal
 
 
 class Utterance:
-    def __init__(self, body, id, expects_response=True):
+    def __init__(self, body, id, expected_reactions=[]):
         self._body = body
         self.id: str = id
-        self._expects_response = expects_response
+        self._expected_reactions = expected_reactions
         self._fill_ins = []
         self.identifier = None
 
@@ -21,7 +21,7 @@ class Utterance:
             return self._body
 
     def expects_response(self):
-        return self._expects_response
+        return len(self._expected_reactions) > 0
 
     def to_statement_finished_belief(self):
 

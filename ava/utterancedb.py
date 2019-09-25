@@ -67,11 +67,11 @@ class UtteranceDB:
         return Utterance(
             id=id,
             body=data["body"],
-            expects_response=(data["expects_response"] if "expects_response" in data.keys() else True)
+            expected_reactions=(data["expected_reactions"] if "expected_reactions" in data.keys() else [])
         )
 
     def extract_data_from_agent_message_string(self, message: str):
-        """[time/suggestion/home_arrival_1, [6pm, 7:30pm]]"""
+        """[/time/suggestion/home_arrival_1, [6pm, 7:30pm]]"""
         uid = re.match("^\[([a-z\/_\d]+)", message)
         fillins_list_string = re.match("^\[.*\[(.*)\]\]$", message).groups(0)[0]
 

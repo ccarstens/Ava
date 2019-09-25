@@ -5,7 +5,7 @@ from ava.input import Input
 from ava.utterancedb import UtteranceDB
 from multiprocessing import Queue
 from ava.exceptions import IOCNoUtteranceNotFoundInHistory
-
+from ava.environment import Environment as e
 
 class Output:
     def __init__(self, input: Input, history: list, io_queue_out: Queue):
@@ -40,7 +40,7 @@ class Output:
         if utterance.expects_response():
             self.input.listen(name)
         else:
-            self.io_queue_out.put(("STATEMENT_FINISHED", utterance))
+            self.io_queue_out.put((e.STATEMENT_FINISHED, utterance))
 
     def on_started_word(self, name, location, length):
         pass

@@ -7,6 +7,21 @@
             "body": "Speak."
         }
     },
+    "query": {
+        "accept": {
+            "event_context": {
+                "with_day_suggestion_1": {
+                    "body": "Of course! Let’s have a look at your schedule: You arrive in {}, {} seems to be free",
+                    "expects_response": false
+
+
+                },
+                "with_day_suggestion_2": {
+                    "body": "on {} but {} looks free. Should we take {} right away?"
+                }
+            }
+        }
+    },
     "operational": {
         "switch_person_1": {
             "body": "Alright, I'll go talk to {} then.",

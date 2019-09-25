@@ -90,10 +90,10 @@ def test_processing_of_multiple_dimensions():
 
 def test_if_conversion_from_dict_data_to_utterance_object_works_well():
     db = UtteranceDB(DB_FILE)
-    utterance = db.transform("time/suggestions/number_one", {"body": "Hey this is me", "expects_response": True})
+    utterance = db.transform("/time/suggestions/number_one", {"body": "Hey this is me", "expected_reactions": ["default"]})
 
     assert isinstance(utterance, Utterance)
-    assert utterance.id == "time/suggestions/number_one"
+    assert utterance.id == "/time/suggestions/number_one"
     assert utterance.get_body() == "Hey this is me"
     assert utterance.expects_response() is True
 
@@ -102,7 +102,7 @@ def test_if_conversion_works_if_no_expects_response_is_set():
     db = UtteranceDB(DB_FILE)
 
 
-    utterance = db.transform("/hello_1", {"body": "Hey this is me"})
+    utterance = db.transform("/hello_1", {"body": "Hey this is me", "expected_reactions": ["default"]})
     assert isinstance(utterance, Utterance)
     assert utterance.id == "/hello_1"
     assert utterance.get_body() == "Hey this is me"

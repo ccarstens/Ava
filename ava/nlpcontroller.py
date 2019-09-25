@@ -2,7 +2,7 @@ from log import log_nlp as log
 from ava.directive import Directive
 import agentspeak as asp
 from spade_bdi.bdi import get_literal_from_functor_and_arguments
-
+from ava.environment import Environment as e
 
 class NLPController:
     def __init__(self):
@@ -20,7 +20,7 @@ class NLPController:
     def extract_intents(self, wit_dict):
         intent_array = self.keys_exists(wit_dict, "entities", "intent")
         if not intent_array:
-            return "NO_INTENT_DETECTED"
+            return e.NO_INTENT_DETECTED
         else:
             return [intent["value"] for intent in intent_array]
 
