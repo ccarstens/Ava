@@ -10,7 +10,7 @@ from spade_bdi.bdi import get_literal_from_functor_and_arguments
 from ava.nlpcontroller import NLPController
 from queue import Empty
 
-from ava.environment import Environment as e
+from definitions import *
 
 from ava.utterancedb import UtteranceDB
 
@@ -71,14 +71,14 @@ class UserController(BDIAgent):
             if response_from_ioc:
                 log.debug(response_from_ioc)
                 flag, payload = response_from_ioc
-                if flag == e.STATEMENT_FINISHED:
+                if flag == STATEMENT_FINISHED:
                     log.debug("statement finished")
                     utterance = payload
 
                     self.ava.bdi.add_belief_literal(utterance.to_statement_finished_belief())
 
                     pass
-                elif flag == e.RECEIVED_USER_RESPONSE:
+                elif flag == RECEIVED_USER_RESPONSE:
                     utterance_id, wit_response = payload
                     log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 

@@ -19,3 +19,9 @@
     
 +response("default/prompt", Intent, Entities) <-
     !expect_response("default/prompt").
+
+
+
+
++!test_get_intention <-
+    .print("test_intention").

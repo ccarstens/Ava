@@ -10,9 +10,6 @@ from ava.exceptions import MissingAvaExcpetion
 
 
 class Environment:
-    RECEIVED_USER_RESPONSE = 1
-    STATEMENT_FINISHED = 2
-    NO_INTENT_DETECTED = 3
 
     def __init__(self, agent_jid, user_controller_jid):
         log.debug("environment init")
@@ -46,7 +43,8 @@ class Environment:
         self.setup_exit()
 
         self.ava.bdi.set_singleton_belief("started", "yes")
-        self.ava.bdi.add_achievement_goal("main")
+        # self.ava.bdi.add_achievement_goal("main")
+        self.ava.bdi.add_achievement_goal("test_get_intention")
         # self.ava.bdi.add_achievement_goal("capture_user_speech")
 
 
