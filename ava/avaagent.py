@@ -5,6 +5,7 @@ from spade_bdi.bdi import BDIAgent
 from spade.template import Template
 from spade_bdi.bdi import parse_literal
 from typing import Union
+import agentspeak
 
 
 class AvaAgent(BDIAgent):
@@ -38,6 +39,18 @@ class AvaAgent(BDIAgent):
                 response = input(question + "\n" + str(readable) + "\n: ")
                 if response in readable:
                     return options[readable.index(response)]
+
+            @self.agent.bdi_actions.add(".get_parent_intention", 1)
+            def _get_parent_intention(agent, term, intention):
+                calling_intention = intention.head_term.functor
+
+                for intention_stack in agent.intentions:
+                    latest_intention = intention_stack[len(intention_stack) - 1]
+                    if latest_intention.head_term.functor == calling_intention:
+                        parent_intention = intention_stack[len(intention_stack) - 2]
+                        if agentspeak.unify(term.args[0], parent_intention.head_term, intention.scope, intention.stack):
+                            yield
+
 
         async def run(self):
             await super().run()

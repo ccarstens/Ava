@@ -3,7 +3,7 @@
 {include("time.asl")}
 // !main gets called from environment
 
-
+!ask_user_xx.
 
 +!main <-
     .log("ava from asl", _);
@@ -19,9 +19,3 @@
     
 +response("default/prompt", Intent, Entities) <-
     !expect_response("default/prompt").
-
-
-
-
-+!test_get_intention <-
-    .print("test_intention").
