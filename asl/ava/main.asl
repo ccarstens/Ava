@@ -3,7 +3,6 @@
 {include("time.asl")}
 // !main gets called from environment
 
-!ask_user_xx.
 
 +!main <-
     .log("ava from asl", _);

@@ -45,7 +45,7 @@ class UtteranceDB:
         return process_layer("", self.db_raw)
 
 
-    def get(self, domain_string, fill_ins=[]):
+    def get(self, domain_string, fill_ins=[], eliciting_intention=None):
         matches = [utterance for utterance in self.db if domain_string in utterance.id]
         utterance = None
         if len(matches) == 1:
@@ -58,10 +58,14 @@ class UtteranceDB:
 
         utterance.set_fill_ins(fill_ins)
 
+        utterance.eliciting_intention = eliciting_intention
+
         self.history.push(utterance)
 
         return utterance
 
+    def get_last_utterance(self):
+        return self.history.get_last_utterance()
 
     def transform(self, id, data):
         return Utterance(
@@ -95,3 +99,19 @@ class UtteranceDB:
     def stop(self):
         log.debug("stopping db")
         self.history.serialize()
+
+    @staticmethod
+    def get_functor_and_argument_from_literal(literal_string: str, functor=None, strip=False):
+        if not functor: # extract functor at beginning of string
+            matches = re.search(rf"^([a-zA-Z_0-1]+)\(([^()]+)\)", literal_string)
+        else: # extract functor anywhere
+            matches = re.search(rf"({functor})\(([^()]+)\)", literal_string)
+
+        functor = matches.group(1)
+        argument = matches.group(2)
+
+        if strip:
+            argument = argument.strip('" ')
+
+        return functor, argument
+

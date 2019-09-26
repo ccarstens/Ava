@@ -169,6 +169,34 @@ def test_incomplete_domain_string_returns_random_item_from_module():
     assert isinstance(random_utterance, Utterance)
 
 
+def test_udb_get_can_take_the_eliciting_intention_as_a_parameter():
+    db = get_udb()
+
+    utterance = db.get("/standard/number_one", eliciting_intention="get_time_from_user")
+
+    assert isinstance(utterance, Utterance)
+    assert utterance.eliciting_intention == "get_time_from_user"
+
+
+# [utterance_id("/time/suggestion/home_arrival_1"), eliciting_intention("my_test_intention"), fill_ins([arrival_home("6pm"), suggested_time("7:30pm")])]
+
+
+def test_udb_can_extract_literal_functor_and_body_from_string():
+    literal_string = "utterance_id(\"/time/suggestion/home_arrival_1\")"
+
+    functor, argument = UtteranceDB.get_functor_and_argument_from_literal(literal_string, strip=True)
+
+    assert functor == "utterance_id"
+    assert argument == "/time/suggestion/home_arrival_1"
+
+
+def test_udb_can_extract_arguments_for_given_functor():
+    literal_string = 'utterance_id("/time/suggestion/home_arrival_1"), depart_time(6:30pm), another_parameter("hello")'
+
+    functor, argument = UtteranceDB.get_functor_and_argument_from_literal(literal_string, functor="depart_time")
+
+    assert functor == "depart_time"
+    assert argument == "6:30pm"
 
 
 
@@ -264,6 +292,17 @@ def test_udb_stores_utterance_in_history_when_getting():
 
     assert isinstance(db.history.get_last_utterance(), Utterance)
     assert db.history.get_last_utterance().id == "/time/suggestion/sub_module/another_module/number_one"
+
+
+def test_udb_can_get_last_utterance_form_history_with_own_method():
+    db = get_udb()
+    utterance = db.get("/standard/number_one")
+
+    last_utterance = db.get_last_utterance()
+
+    assert utterance == last_utterance
+
+
 
 
 

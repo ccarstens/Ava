@@ -3,12 +3,13 @@ from agentspeak import Literal
 
 
 class Utterance:
-    def __init__(self, body, id, expected_reactions=[]):
+    def __init__(self, body, id, expected_reactions=[], eliciting_intention=None):
         self._body = body
         self.id: str = id
         self._expected_reactions = expected_reactions
         self._fill_ins = []
         self.identifier = None
+        self.eliciting_intention = eliciting_intention
 
     # todo add a check whether the number of placeholders matches the number of fill ins
     def get_body(self):

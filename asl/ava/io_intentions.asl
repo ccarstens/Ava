@@ -3,7 +3,7 @@ statement_iterator(0).
 
 +!expect_response(UtteranceID, FillIns) <-
     usercontroller(UserJID);
-    .send(UserJID, expect_response, [UtteranceID, FillIns]).
+    .send(UserJID, expect_response, [utterance_id(UtteranceID), eliciting_intention("my_test_intention"), fill_ins(FillIns)]).
 
 +!expect_response(UtteranceID) <-
     !expect_response(UtteranceID, []).

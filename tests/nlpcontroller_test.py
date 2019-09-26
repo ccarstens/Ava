@@ -1,5 +1,6 @@
 from ava.nlpcontroller import NLPController
 from ava.directive import Directive
+from definitions import *
 
 
 def test_nlpc_extracts_single_intent_from_dict():
@@ -54,8 +55,8 @@ def test_nlpc_returns_flag_for_missing_intent():
     nlpc = NLPController()
 
     intents = nlpc.extract_intents(wit_dict)
-    assert isinstance(intents, str)
-    assert intents == "NO_INTENT_DETECTED"
+    assert isinstance(intents, int)
+    assert intents == NO_INTENT_DETECTED
 
 
 def test_process_method_extracts_intent_correctly_from_tuple():

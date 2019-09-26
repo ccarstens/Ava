@@ -58,4 +58,9 @@ def test_u_has_no_public_fill_ins_property():
     assert not hasattr(utterance, "fill_ins")
 
 
+def test_u_can_take_an_eliciting_intention_as_an_optional_parameter():
+    utterance = Utterance("blank {}", "default", expected_reactions=["confirmation"], eliciting_intention="get_time_from_user")
+
+    assert hasattr(utterance, "eliciting_intention")
+    assert utterance.eliciting_intention == "get_time_from_user"
 
