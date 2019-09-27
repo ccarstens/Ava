@@ -21,10 +21,6 @@ class AvaAgent(BDIAgent):
             def _ask_user(question):
                 return input(question)
 
-            @self.agent.bdi_actions.add(".log", 1)
-            def _log(agent, term, intention):
-                log.debug(term.args[0])
-
             @self.agent.bdi_actions.add_function(".log", (str, ))
             def _log(message):
                 log.debug(message)

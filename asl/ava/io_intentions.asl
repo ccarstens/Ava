@@ -17,7 +17,7 @@ statement_iterator(0).
     while(not statement_finished(UtteranceID, yes)){
         statement_iterator(X);
         if(X mod 33 == 0){
-            .log(".");
+            .log(".", _);
         }
         -+statement_iterator(X + 1);
     };

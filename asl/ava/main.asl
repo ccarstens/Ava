@@ -5,13 +5,13 @@
 
 
 +!main <-
-    .log("ava from asl");
+    .log("ava from asl", _);
     .wait(1000);
     !expect_response("/operational/initial_blank", []).
 
 
 +response(main, initial_query, Entities) <-
-    .log("initial query received").
+    .log("initial query received", _).
 
 
 
