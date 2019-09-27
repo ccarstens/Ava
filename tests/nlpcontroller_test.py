@@ -1,7 +1,7 @@
 from ava.nlpcontroller import NLPController
 from ava.directive import Directive
 from definitions import *
-
+from ava.utterance import Utterance
 
 def test_nlpc_extracts_single_intent_from_dict():
     wit_dict = {
@@ -69,7 +69,7 @@ def test_process_method_extracts_intent_correctly_from_tuple():
         }]
     },
     'msg_id': '1yoIkxVstxREydBbY'}
-    response = ("default", wit_dict)
+    response = (Utterance("hello", "default"), wit_dict)
 
     nlpc = NLPController()
 
@@ -89,7 +89,7 @@ def test_directive_contains_wit_data_when_created_by_nlpc():
         }]
     },
     'msg_id': '1yoIkxVstxREydBbY'}
-    response = ("default", wit_dict)
+    response = (Utterance("hello", "default"), wit_dict)
 
     nlpc = NLPController()
 

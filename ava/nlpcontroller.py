@@ -10,11 +10,15 @@ class NLPController:
         log.debug("init nlpc")
 
     def process(self, wit_data):
-        utterance_id, wit_response = wit_data
+        utterance, wit_response = wit_data
 
         intents = self.extract_intents(wit_response)
         # todo extract named entities
-        directive = Directive(utterance_id, intents)
+        directive = Directive(
+            eliciting_utterance_id=utterance.id,
+            eliciting_intention=utterance.eliciting_intention,
+            intents=intents
+        )
         directive.raw_wit_data = wit_response
         return directive
 

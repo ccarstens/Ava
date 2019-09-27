@@ -43,19 +43,18 @@ class UserController(BDIAgent):
             # await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
-            log.critical(message.body)
-            functor, args = parse_literal(message.body)
+            # functor, args = parse_literal(message.body)
             # args = args[0]
             log.debug(f"received message with custom ilf type {message}")
 
 
 
             utterance = self.agent.db.get_by_agent_string(message.body)
+            log.critical(f"here {utterance.id}")
 
             if utterance is not None:
                 self.agent.io_queue_in.put(utterance)
                 await asyncio.sleep(3)
-                log.critical(f"here {utterance.identifier}")
             else:
                 log.error("no utterance received")
 
@@ -82,7 +81,10 @@ class UserController(BDIAgent):
                     utterance_id, wit_response = payload
                     log.debug(f"wit response for transcript '{wit_response['_text']}' in response to utterance {utterance_id}")
 
-                    directive = self.nlpc.process(payload)
+                    utterance = self.db.get_last_utterance(utterance_id)
+
+                    directive = self.nlpc.process((utterance, wit_response))
+
                     self.db.history.push(directive)
                     log.debug(f"received intents {directive.intents}")
                     if directive.has_intents():

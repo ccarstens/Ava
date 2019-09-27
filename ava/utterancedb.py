@@ -45,7 +45,9 @@ class UtteranceDB:
         return process_layer("", self.db_raw)
 
 
-    def get(self, domain_string, fill_ins=[], eliciting_intention=None):
+    def get(self, domain_string, fill_ins=None, eliciting_intention=None):
+        if fill_ins is None:
+            fill_ins = {}
         matches = [utterance for utterance in self.db if domain_string in utterance.id]
         utterance = None
         if len(matches) == 1:
@@ -64,8 +66,8 @@ class UtteranceDB:
 
         return utterance
 
-    def get_last_utterance(self):
-        return self.history.get_last_utterance()
+    def get_last_utterance(self, uid=None):
+        return self.history.get_last_utterance(uid=uid)
 
     def transform(self, id, data):
         return Utterance(
@@ -75,25 +77,36 @@ class UtteranceDB:
         )
 
     def extract_data_from_agent_message_string(self, message: str):
-        """[/time/suggestion/home_arrival_1, [6pm, 7:30pm]]"""
-        uid = re.match("^\[([a-z\/_\d]+)", message)
-        fillins_list_string = re.match("^\[.*\[(.*)\]\]$", message).groups(0)[0]
+
+        data = {}
+
+        for functor in ["utterance_id", "eliciting_intention"]:
+            data[functor] = UtteranceDB.get_argument_for_functor(functor, message)
+
+        fillins_list_string = UtteranceDB.get_argument_for_functor("fill_ins", message, extract_list=True)
 
         def create_list_from_string(list_string):
+            fill_in_data = {}
+            list_string = list_string.strip("[]")
             if "," in list_string:
                 items = list_string.split(",")
             elif len(list_string.strip()):
                 items = [list_string, ]
             else:
                 items = []
-            return [x.strip() for x in items]
+            for x in items:
+                func, argument = UtteranceDB.get_functor_and_argument_from_literal(x.strip())
+                fill_in_data[func] = argument
+            return fill_in_data
 
-        fillins_list = create_list_from_string(fillins_list_string)
-        return uid.groups(0)[0], fillins_list
+        data["fill_ins"] = create_list_from_string(fillins_list_string)
+        return data
 
     def get_by_agent_string(self, message_string: str):
-        utterance_id, fill_ins = self.extract_data_from_agent_message_string(message_string)
-        utterance = self.get(utterance_id, fill_ins=fill_ins)
+        data = self.extract_data_from_agent_message_string(message_string)
+
+        utterance = self.get(data["utterance_id"], fill_ins=data["fill_ins"])
+        utterance.eliciting_intention = data["eliciting_intention"]
         return utterance
 
     def stop(self):
@@ -101,17 +114,29 @@ class UtteranceDB:
         self.history.serialize()
 
     @staticmethod
-    def get_functor_and_argument_from_literal(literal_string: str, functor=None, strip=False):
-        if not functor: # extract functor at beginning of string
-            matches = re.search(rf"^([a-zA-Z_0-1]+)\(([^()]+)\)", literal_string)
-        else: # extract functor anywhere
-            matches = re.search(rf"({functor})\(([^()]+)\)", literal_string)
+    def get_functor_and_argument_from_literal(literal_string: str, strip=True):
+        matches = re.search(rf"^([a-zA-Z_0-1]+)\(([^()]+)\)", literal_string)
 
-        functor = matches.group(1)
+        extracted_functor = matches.group(1)
         argument = matches.group(2)
 
         if strip:
             argument = argument.strip('" ')
 
-        return functor, argument
+        return extracted_functor, argument
 
+
+    @staticmethod
+    def get_argument_for_functor(functor, literal_string, strip=True, extract_list=False):
+        if extract_list and "[" in literal_string and "]" in literal_string :
+            matches = re.search(rf"({functor})\(\[(.*)\]\)", literal_string)
+        else:
+            matches = re.search(rf"({functor})\(([^()]+)\)", literal_string)
+
+
+        argument = matches.group(2)
+
+        if strip:
+            argument = argument.strip('" ')
+
+        return argument

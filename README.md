@@ -41,3 +41,7 @@ Refer to https://gist.github.com/jiaaro/9767512210a1d80a8a0d#gistcomment-3023216
 While being in the venv
 `python main.py`
 
+
+### Naming
+Intention refers to intentions/functions within AgentSpeak(L)
+Intent refers to intents detected in user se by Wit.ai

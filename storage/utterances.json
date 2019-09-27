@@ -24,7 +24,7 @@
     },
     "operational": {
         "switch_person_1": {
-            "body": "Alright, I'll go talk to {} then.",
+            "body": "Alright, I'll go talk to {name_person} then.",
             "expects_response": false,
             "expected_reactions": []
         },
@@ -36,7 +36,7 @@
     "time": {
         "suggestion": {
             "home_arrival_1": {
-                "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {}, what do you think about going for dinner at {} then?",
+                "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {arrival_home}, what do you think about going for dinner at {suggested_time} then?",
                 "expected_reactions": [
                     "confirm",
                     "reject"
