@@ -4,7 +4,6 @@
 // !main gets called from environment
 
 
-
 +!main <-
     .log("ava from asl", _);
     .wait(1000);

@@ -3,25 +3,26 @@ from agentspeak import Literal
 
 
 class Utterance:
-    def __init__(self, body, id, expects_response=True):
+    def __init__(self, body, id, expected_reactions=[], eliciting_intention=None):
         self._body = body
         self.id: str = id
-        self._expects_response = expects_response
-        self._fill_ins = []
+        self._expected_reactions = expected_reactions
+        self._fill_ins = {}
         self.identifier = None
+        self.eliciting_intention = eliciting_intention
 
     # todo add a check whether the number of placeholders matches the number of fill ins
     def get_body(self):
-        if "{}" in self._body:
-            if len(self._fill_ins):
-                return self._body.format(*self._fill_ins)
-            else:
-                raise MissingFillInsExceptions
+
+        body_string = self._body.format(**self._fill_ins)
+
+        if "{" in body_string or "}" in body_string:
+            raise MissingFillInsExceptions
         else:
-            return self._body
+            return body_string
 
     def expects_response(self):
-        return self._expects_response
+        return len(self._expected_reactions) > 0
 
     def to_statement_finished_belief(self):
 
@@ -31,7 +32,7 @@ class Utterance:
         yes_literal = Literal("yes")
         return Literal("statement_finished", (self.id, yes_literal))
 
-    def set_fill_ins(self, fillins: list):
+    def set_fill_ins(self, fillins: dict):
         self._fill_ins = fillins
 
     def get_fill_ins(self, i=None):

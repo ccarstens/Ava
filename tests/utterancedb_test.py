@@ -90,10 +90,10 @@ def test_processing_of_multiple_dimensions():
 
 def test_if_conversion_from_dict_data_to_utterance_object_works_well():
     db = UtteranceDB(DB_FILE)
-    utterance = db.transform("time/suggestions/number_one", {"body": "Hey this is me", "expects_response": True})
+    utterance = db.transform("/time/suggestions/number_one", {"body": "Hey this is me", "expected_reactions": ["default"]})
 
     assert isinstance(utterance, Utterance)
-    assert utterance.id == "time/suggestions/number_one"
+    assert utterance.id == "/time/suggestions/number_one"
     assert utterance.get_body() == "Hey this is me"
     assert utterance.expects_response() is True
 
@@ -102,7 +102,7 @@ def test_if_conversion_works_if_no_expects_response_is_set():
     db = UtteranceDB(DB_FILE)
 
 
-    utterance = db.transform("/hello_1", {"body": "Hey this is me"})
+    utterance = db.transform("/hello_1", {"body": "Hey this is me", "expected_reactions": ["default"]})
     assert isinstance(utterance, Utterance)
     assert utterance.id == "/hello_1"
     assert utterance.get_body() == "Hey this is me"
@@ -140,8 +140,8 @@ def test_if_db_get_returns_a_valid_utterance_instance():
 
 def test_db_get_accepts_fill_ins():
     db = get_udb()
-    utterance = db.get("/standard/number_one", ["robert"])
-    assert utterance.get_fill_ins(0) == "robert"
+    utterance = db.get("/standard/number_one", {"name": "robert"})
+    assert utterance.get_fill_ins("name") == "robert"
 
 
 def test_incomplete_domain_string_returns_random_item_from_module():
@@ -169,83 +169,99 @@ def test_incomplete_domain_string_returns_random_item_from_module():
     assert isinstance(random_utterance, Utterance)
 
 
+def test_udb_get_can_take_the_eliciting_intention_as_a_parameter():
+    db = get_udb()
 
+    utterance = db.get("/standard/number_one", eliciting_intention="get_time_from_user")
+
+    assert isinstance(utterance, Utterance)
+    assert utterance.eliciting_intention == "get_time_from_user"
+
+
+def test_udb_can_extract_literal_functor_and_body_from_string():
+    literal_string = "utterance_id(\"/time/suggestion/home_arrival_1\")"
+
+    functor, argument = UtteranceDB.get_functor_and_argument_from_literal(literal_string)
+
+    assert functor == "utterance_id"
+    assert argument == "/time/suggestion/home_arrival_1"
+
+
+def test_udb_can_extract_arguments_for_named_functor():
+    literal_string = 'utterance_id("/time/suggestion/home_arrival_1"), depart_time(6:30pm), another_parameter("hello")'
+
+    argument = UtteranceDB.get_argument_for_functor("depart_time", literal_string)
+
+    assert argument == "6:30pm"
+
+
+def test_udb_can_extract_list_content_as_argument_for_functor():
+    literal_string = '[utterance_id("/time/suggestion/home_arrival_1"), eliciting_intention("my_test_intention"), fill_ins([arrival_home("6pm"), suggested_time("7:30pm")])]'
+
+    fill_ins_string = UtteranceDB.get_argument_for_functor("fill_ins", literal_string, extract_list=True)
+
+    assert fill_ins_string == 'arrival_home("6pm"), suggested_time("7:30pm")'
 
 
 def test_if_db_can_parse_uid_and_a_list_of_options_from_the_agent_message_body():
-    message_body = "[/time/suggestion/option_1, [6pm, 7:30pm]]"
+    message_body = '[utterance_id("/time/suggestion/home_arrival_1"), eliciting_intention("my_test_intention"), fill_ins([arrival_home("6pm"), suggested_time("7:30pm")])]'
 
-    db = UtteranceDB(DB_FILE)
-    db.setup()
+    db = get_udb()
 
-    uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
+    data = db.extract_data_from_agent_message_string(message_body)
 
-    assert len(fill_ins) == 2
-    assert uid == "/time/suggestion/option_1"
-    assert fill_ins[0] == "6pm"
-    assert fill_ins[1] == "7:30pm"
+
+    assert len(list(data.keys())) == 3
+    assert data["utterance_id"] == "/time/suggestion/home_arrival_1"
+    assert data["eliciting_intention"] == "my_test_intention"
+    assert isinstance(data["fill_ins"], dict)
+    assert "arrival_home" in data["fill_ins"].keys()
+    assert "suggested_time" in data["fill_ins"].keys()
+    assert data["fill_ins"]["arrival_home"] == "6pm"
+    assert data["fill_ins"]["suggested_time"] == "7:30pm"
 
 
 def test_message_parser_can_deal_with_empty_list():
-    message_body = "[/time_suggestion_based_on_home_arrival_1, []]"
+    message_body = '[utterance_id("/time/suggestion/home_arrival_1"), eliciting_intention("my_test_intention"), fill_ins([])]'
+
 
     db = UtteranceDB(DB_FILE)
     db.setup()
 
-    uid, fill_ins = db.extract_data_from_agent_message_string(message_body)
+    data = db.extract_data_from_agent_message_string(message_body)
 
-    assert len(fill_ins) == 0
-    assert type(fill_ins) == list
-    assert uid == "/time_suggestion_based_on_home_arrival_1"
+    assert len(list(data["fill_ins"].keys())) == 0
+    assert type(data["fill_ins"]) == dict
+    assert data["utterance_id"] == "/time/suggestion/home_arrival_1"
 
 
 def test_get_by_agent_string_returns_utterance_instance_when_getting_a_well_formed_string():
-    message_body = "[/time/suggestion/default, []]"
-
-    db = UtteranceDB(DB_FILE)
-    db.setup()
-
-    utterance = db.get_by_agent_string(message_body)
-
-    assert isinstance(utterance, Utterance)
-    assert utterance.get_fill_ins() == []
-    assert utterance.id == "/time/suggestion/default"
-
-
-def test_get_by_agent_string_returns_utterance_with_existing_fill_ins():
-    message_body = "[/standard/number_one, [45, 69, Robert]]"
+    message_body = '[utterance_id("/standard/number_one"), eliciting_intention("my_test_intention"), fill_ins([])]'
 
     db = get_udb()
 
     utterance = db.get_by_agent_string(message_body)
 
     assert isinstance(utterance, Utterance)
-    assert utterance.get_fill_ins() == ["45", "69", "Robert"]
+    assert utterance.get_fill_ins() == {}
+    assert utterance.id == "/standard/number_one"
+
+
+def test_get_by_agent_string_returns_utterance_with_existing_fill_ins():
+    message_body = '[utterance_id("/standard/number_one"), eliciting_intention("my_test_intention"), fill_ins([arrival_home("6pm"), suggested_time("7:30pm")])]'
+
+    db = get_udb()
+
+    utterance = db.get_by_agent_string(message_body)
+
+    assert isinstance(utterance, Utterance)
+    assert utterance.get_fill_ins() == {"suggested_time": "7:30pm", "arrival_home": "6pm"}
     assert utterance.id == "/standard/number_one"
 
 
 def test_udb_raises_excpetion_if_no_utterance_was_found():
 
-    db = UtteranceDB(DB_FILE)
-    db.db_raw = {"time": {
-        "suggestion": {
-            "sub_module": {
-                "another_module": {
-                    "number_one": {
-                        "body": "this is my time suggestion one"
-                    },
-                    "number_two": {
-                        "body": "this is my time suggestion two"
-                    },
-                    "number_three": {
-                        "body": "this is my time suggestion three"
-                    },
-                }
-            }
-        }
-    }}
-    db.db = db.process_modules()
-
+    db = get_udb()
 
     with pytest.raises(UtteranceNotFoundException):
         utterance = db.get("/this/is/missing")
@@ -264,6 +280,25 @@ def test_udb_stores_utterance_in_history_when_getting():
 
     assert isinstance(db.history.get_last_utterance(), Utterance)
     assert db.history.get_last_utterance().id == "/time/suggestion/sub_module/another_module/number_one"
+
+
+def test_udb_can_get_last_utterance_form_history_with_own_method():
+    db = get_udb()
+    utterance = db.get("/standard/number_one")
+
+    last_utterance = db.get_last_utterance()
+
+    assert utterance == last_utterance
+
+
+def test_udb_can_get_last_utterance_form_history_by_uid_with_own_method():
+    db = get_udb()
+    utterance = db.get("/standard/number_one")
+    next_utterance = db.get("/time/suggestion/sub_module/another_module/number_one")
+
+    last_utterance = db.get_last_utterance("/standard/number_one")
+
+    assert utterance == last_utterance
 
 
 
@@ -289,7 +324,7 @@ def get_udb():
         },
         "standard": {
             "number_one": {
-                "body": "this is a sample"
+                "body": "this is a sample for {name}"
             }
         }
     }

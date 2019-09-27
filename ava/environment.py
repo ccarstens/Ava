@@ -7,7 +7,10 @@ from ava.nlpcontroller import NLPController
 from ava.utterancedb import UtteranceDB
 from ava.exceptions import MissingAvaExcpetion
 
+
+
 class Environment:
+
     def __init__(self, agent_jid, user_controller_jid):
         log.debug("environment init")
 
@@ -41,6 +44,7 @@ class Environment:
 
         self.ava.bdi.set_singleton_belief("started", "yes")
         self.ava.bdi.add_achievement_goal("main")
+        # self.ava.bdi.add_achievement_goal("conversation_part")
         # self.ava.bdi.add_achievement_goal("capture_user_speech")
 
 
