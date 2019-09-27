@@ -30,7 +30,7 @@ Refer to https://prosody.im/download/start for details
 `brew install portaudio`
 
 ### 3. PyAudio
-Remove pyaudio from `requirements.txt`, because it cant be insalled with the default pip install command. Use instead the following:
+Remove pyaudio from `requirements.txt`, because it can't be installed with the default pip install command. Use instead the following:
 
 `pip install --global-option='build_ext' --global-option='-I/usr/local/include' --global-option='-L/usr/local/lib' pyaudio`
 Refer to https://gist.github.com/jiaaro/9767512210a1d80a8a0d#gistcomment-3023216 if this is not working
@@ -43,5 +43,5 @@ While being in the venv
 
 
 ### Naming
-Intention refers to intentions/functions within AgentSpeak(L)
-Intent refers to intents detected in user se by Wit.ai
+- **Intention** refers to intentions/functions within AgentSpeak(L)
+- **Intent** refers to intents detected in user response returned by Wit.ai
