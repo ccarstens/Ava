@@ -5,6 +5,6 @@
     
 +!tell_ava(Belief) <-
     .log("passing the following to ava", _);
-    .log(Belief);
+    .log(Belief, _);
     ava(AvaJID);
     .send(AvaJID, tell_response, Belief).

@@ -23,4 +23,4 @@ statement_iterator(0).
     };
     -+statement_iterator(0);
     .concat("received signal ", UtteranceID, " finished", LogMessage);
-    .log(LogMessage).
+    .log(LogMessage, _).
