@@ -5,9 +5,17 @@
 
 
 +!main <-
-    .log("ava from asl", _);
+    .log("ava from asl");
     .wait(1000);
-    !find_time_option.
+    !expect_response("/operational/initial_blank", []).
+
+
++response(main, initial_query, Entities) <-
+    .log("initial query received").
+
+
+
+
 
 
 

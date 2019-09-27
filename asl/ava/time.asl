@@ -11,7 +11,7 @@ confirmed(day, thursday).
 confirmed(person, "Lauren").
 
 +!find_time_option <-
-    .log("init find time option", _);
+    .log("init find time option");
     confirmed(day, Day);
     schedule(Day, arrival_home, ArrivalHome);
     suggestion_for_user(time, Day, Time);
@@ -19,7 +19,7 @@ confirmed(person, "Lauren").
     
     
 +response(find_time_option, confirmation, InputValues) <-
-    .log("confirmation received", _);
+    .log("confirmation received");
     !indicate_switch_person.
 
     

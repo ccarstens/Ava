@@ -27,6 +27,8 @@ class UserController(BDIAgent):
             def _log(message):
                 log.info(message)
 
+
+
             @self.agent.bdi_actions.add_function(".ask_user_options", (str, tuple))
             def _ask_user_options(question, options):
                 readable = list(map(lambda l: str(l), options))

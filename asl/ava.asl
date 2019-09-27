@@ -16,11 +16,11 @@ important_id("greeting_2").
     .print(StartValue).
 
 +!main: started(yes) <-
-    .log("Hello, this is Ava", _);
+    .log("Hello, this is Ava");
 
     !expect_response("offer_help_1", Response);
-    .log("finished", _);
-    .log("now we can do other things, like looping", _);
+    .log("finished");
+    .log("now we can do other things, like looping");
     !myloop.
 
 
@@ -48,18 +48,18 @@ important_id("greeting_2").
         .wait(33);
         .print("waiting for statement to finish");
     };
-    .log("I CAN CONTINUE NOW", _);
+    .log("I CAN CONTINUE NOW");
     -+statement_finished(UtteranceID, Context, yes);
     statement_finished(UtteranceID, Context, Finished).
 
 +responded_hello_1(temperature_set) <-
-    .log("I am setting the temperature", _).
+    .log("I am setting the temperature").
 
 
 +responded_hello_1(temperature_get) <-
     ?temperature(now, Temp, Condition);
     .concat("It's currently ", Condition, " and ", Temp , " degrees.", X);
-    .log(X, _).
+    .log(X).
 
     
 +responded_offer_help_1("temperature_get") <-

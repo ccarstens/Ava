@@ -1,10 +1,10 @@
 !main.
 
 +!main <-
-    .log("user from asl", _).
+    .log("user from asl").
     
 +!tell_ava(Belief) <-
-    .log("passing the following to ava", _);
-    .log(Belief, _);
+    .log("passing the following to ava");
+    .log(Belief);
     ava(AvaJID);
     .send(AvaJID, tell_response, Belief).

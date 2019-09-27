@@ -1,7 +1,7 @@
 !main.
 
 +!main <-
-    .log("Hello, this is User Agent", _).
+    .log("Hello, this is User Agent").
 
 
 

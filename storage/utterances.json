@@ -1,40 +1,85 @@
 {
-    "default": {
-        "blank": {
-            "body": "blank {value}"
-        },
-        "prompt": {
-            "body": "Speak."
-        }
-    },
     "query": {
         "accept": {
-            "event_context": {
-                "with_day_suggestion_1": {
-                    "body": "Of course! Let’s have a look at your schedule: You arrive in {}, {} seems to be free",
-                    "expects_response": false
-
-
+            "1": {
+                "body": "Of course!"
+            },
+            "2": {
+                "body": "Sure thing!"
+            },
+            "3": {
+                "body": "Yeah sure!"
+            }
+        }
+    },
+    "day": {
+        "suggest": {
+            "day_range_overview_1": {
+                "body": "Let’s have a look at your schedule: {day_suggestion_1} could work, {blocked_day_1} you’re probably at {blocked_day_1_activity} but {day_suggestion_2} looks good too. Should we take {day_suggestion_2} right away?",
+                "expected_reactions": ["confirm", "reject_propose"]
+            },
+            "pick_second_option_1": {
+                "body": "Okay, and in case {person_name}’s busy, should we take {day_suggestion} as a second option?",
+                "expected_reactions": ["confirm", "reject_propose"]
+            }
+        }
+    },
+    "place": {
+        "request_preference": {
+            "body": "Alright. About a place: Have you got something in mind already or should I give you some options?",
+            "expected_reactions": ["confirm", "reject_propose"]
+        },
+        "choice": {
+            "request_1": {
+                "body": "How do these sound to you?",
+                "expected_reactions": ["reject", "confirm_one", "confirm_two", "confirm_all", "repeat", "repeat_one"]
+            },
+            "confirm_user_choice_1": {
+                "body": "Okay then, I’ll run them {options_count} with {person_name} later"
+            }
+        },
+        "suggest": {
+            "with_context": {
+                "referral": {
+                    "friend_1": {
+                        "body": "Alright, number one is {place_name} in {place_nbhd}, it’s the one {referring_friend} send you {time_period_ago}.",
+                        "expected_reactions": ["confirm", "notice", "reject"]
+                    }
                 },
-                "with_day_suggestion_2": {
-                    "body": "on {} but {} looks free. Should we take {} right away?"
+                "frequency": {
+                    "medium_traits_1": {
+                        "body": "You could also go to {place_name}, the {place_traits} you’ve been to {frequency_visits}.",
+                        "expected_reactions": ["confirm", "notice", "reject"]
+
+                    }
+                },
+                "novelty_far_vs_traits": {
+                    "medium_1": {
+                        "body": "Or there also is a rather new place called {place_name}. It’s a little farther away, in {place_nbhd}, but it {traits}",
+                        "expected_reactions": ["confirm", "notice", "reject"]
+                    }
+                }
+            },
+            "repeat": {
+                "1": {
+                    "body": "That was {place_name} in {place_nbdh}.",
+                    "expected_reactions": ["inherit"]
                 }
             }
         }
     },
-    "operational": {
-        "switch_person_1": {
-            "body": "Alright, I'll go talk to {name_person} then.",
-            "expects_response": false,
-            "expected_reactions": []
-        },
-        "offer_help_1": {
-            "body": "Hey {}, what can I do for you?",
-            "expected_reactions": ["query_dinner", "rejection"]
-        }
-    },
     "time": {
-        "suggestion": {
+        "request_time_commitment_1": {
+            "body": "Do you wanna talk about times already?",
+            "expected_reactions": ["confirm", "reject"]
+        },
+        "suggest": {
+            "with_context": {
+                "home_arrival_1": {
+                    "body": "If it’s gonna be {day_option} you’d probably go home first, so between {time_interval_start} and {time_interval_end} might work.",
+                    "expected_reactions": ["confirm", "reject_propose", "abort_time_suggestions"]
+                }
+            },
             "home_arrival_1": {
                 "body": "Okay, let’s talk about the time, since with both places it would be good to make a reservation. I guess you’ll come home around {arrival_home}, what do you think about going for dinner at {suggested_time} then?",
                 "expected_reactions": [
@@ -42,6 +87,33 @@
                     "reject"
                 ]
             }
+        }
+    },
+    "operational": {
+        "switch_person": {
+            "availability_sharing_1": {
+                "body": "Okay! I’ll talk to {person_name} then and tell him about the options. In case the day’s don’t work for {person_pronoun}, may I share your general availability for the days after {cutoff_day} with him?",
+                "expected_reactions": ["confirm", "reject"]
+            },
+            "indicate_return": {
+                "body": "Ok. I’m gonna be back soon then."
+            }
+        },
+        "offer_help_1": {
+            "body": "Hey {user_name}, what can I do for you?",
+            "expected_reactions": ["query", "reject"]
+        },
+        "initial_blank": {
+            "body": "",
+            "expected_reactions": ["initial_query"]
+        }
+    },
+    "default": {
+        "blank": {
+            "body": "blank {value}"
+        },
+        "prompt": {
+            "body": "Speak."
         }
     }
 }

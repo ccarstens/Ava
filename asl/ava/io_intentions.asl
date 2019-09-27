@@ -17,10 +17,10 @@ statement_iterator(0).
     while(not statement_finished(UtteranceID, yes)){
         statement_iterator(X);
         if(X mod 33 == 0){
-            .log(".", _);
+            .log(".");
         }
         -+statement_iterator(X + 1);
     };
     -+statement_iterator(0);
     .concat("received signal ", UtteranceID, " finished", LogMessage);
-    .log(LogMessage, _).
+    .log(LogMessage).
