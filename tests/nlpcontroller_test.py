@@ -99,3 +99,74 @@ def test_directive_contains_wit_data_when_created_by_nlpc():
     assert directive.raw_wit_data["_text"] == "yeah that sounds good"
 
 
+# def test_nlpc_extracts_all_entities_from_wit_response():
+#     wit = get_query_dict()
+#
+#
+#     entities = NLPController.extract_entities(wit)
+#
+#     assert "contact" in list(entities.keys())
+
+
+def test_nlpc_extracts_dinner_person_from_contact_entity_raw_data():
+    raw = [{
+                'confidence': 0.90589,
+                'suggested': True,
+                'type': 'value',
+                'value': 'siri'
+            }, {
+                'confidence': 0.91578,
+                'suggested': True,
+                'type': 'value',
+                'value': 'lauren'
+            }]
+
+    dinner_person = NLPController.extract_dinner_contact(raw)
+
+    assert isinstance(dinner_person, str)
+    assert dinner_person == "lauren"
+
+
+def get_query_dict():
+    return {
+        '_text': "hey siri i  want to have dinner with lauren next week can "
+        'you set that up',
+        'entities': {
+            'contact': [{
+                'confidence': 0.90589,
+                'suggested': True,
+                'type': 'value',
+                'value': 'siri'
+            }, {
+                'confidence': 0.91578,
+                'suggested': True,
+                'type': 'value',
+                'value': 'lauren'
+            }],
+            'datetime': [{
+                'confidence': 0.9673275,
+                'grain': 'week',
+                'type': 'value',
+                'value': '2019-09-30T00:00:00.000-07:00',
+                'values': [{
+                    'grain': 'week',
+                    'type': 'value',
+                    'value': '2019-09-30T00:00:00.000-07:00'
+                }]
+            }],
+            'greetings': [{
+                'confidence': 0.99215781699234,
+                'value': 'true'
+            }],
+            'intent': [{
+                'confidence': 0.9989392725537,
+                'value': 'initial_query'
+            }],
+            'plan_dinner': [{
+                'confidence': 1,
+                'type': 'value',
+                'value': 'dinner'
+            }]
+        },
+        'msg_id': '1tu2KHjlmV2G9s1tZ'
+    }

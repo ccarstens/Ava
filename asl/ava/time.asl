@@ -15,7 +15,7 @@ confirmed(person, "Lauren").
     confirmed(day, Day);
     schedule(Day, arrival_home, ArrivalHome);
     suggestion_for_user(time, Day, Time);
-    !expect_response("/time/suggestion/home_arrival_1", [arrival_home(ArrivalHome), suggested_time(Time)]).
+    !expect_response("/time/suggest/home_arrival_1", [arrival_home(ArrivalHome), suggested_time(Time)]).
     
     
 +response(find_time_option, confirmation, InputValues) <-
@@ -25,4 +25,4 @@ confirmed(person, "Lauren").
     
 +!indicate_switch_person <-
     confirmed(person, Person);
-    !statement("/operational/switch_person_1", [name_person(Person)]).
+    !statement("/operational/switch_person/availability_sharing_1", [person_name(Person), person_pronoun("his"), cutoff_day("Friday")]).

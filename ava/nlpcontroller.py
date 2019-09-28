@@ -29,6 +29,17 @@ class NLPController:
         else:
             return [intent["value"] for intent in intent_array]
 
+    @staticmethod
+    def extract_dinner_contact(raw: list):
+        for contact in raw:
+            if contact["value"] not in ["siri", "eva", "eve"]:
+                return contact["value"]
+        return NO_DINNER_CONTACT
+
+
+
+
+
     def keys_exists(self, element, *keys):
         '''
         Check if *keys (nested) exists in `element` (dict).
