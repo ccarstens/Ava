@@ -115,7 +115,7 @@ class UtteranceDB:
 
     @staticmethod
     def get_functor_and_argument_from_literal(literal_string: str, strip=True):
-        matches = re.search(rf"^([a-zA-Z_0-1]+)\(([^()]+)\)", literal_string)
+        matches = re.search(rf"^([a-zA-Z_0-9]+)\(([^()]+)\)", literal_string.strip())
 
         extracted_functor = matches.group(1)
         argument = matches.group(2)

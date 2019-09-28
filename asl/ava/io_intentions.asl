@@ -16,7 +16,7 @@ statement_iterator(0).
     -+statement_finished(UtteranceID, no);
     while(not statement_finished(UtteranceID, yes)){
         statement_iterator(X);
-        if(X mod 33 == 0){
+        if(X mod 1000 == 0){
             .log(".", _);
         }
         -+statement_iterator(X + 1);

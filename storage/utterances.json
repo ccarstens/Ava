@@ -9,13 +9,16 @@
             },
             "3": {
                 "body": "Yeah sure!"
+            },
+            "4": {
+                "body": "Alright!"
             }
         }
     },
     "day": {
         "suggest": {
             "day_range_overview_1": {
-                "body": "Let’s have a look at your schedule: {day_suggestion_1} could work, {blocked_day_1} you’re probably at {blocked_day_1_activity} but {day_suggestion_2} looks good too. Should we take {day_suggestion_2} right away?",
+                "body": "Let’s pick days that we propose to {person_name}: {day_suggestion_1} could work, {blocked_day_1} you’re probably at {blocked_day_1_activity} but {day_suggestion_2} looks good too. Should we take {day_suggestion_2} right away?",
                 "expected_reactions": ["confirm", "reject_propose"]
             },
             "pick_second_option_1": {
@@ -55,7 +58,7 @@
                 },
                 "novelty_far_vs_traits": {
                     "medium_1": {
-                        "body": "Or there also is a rather new place called {place_name}. It’s a little farther away, in {place_nbhd}, but it {traits}",
+                        "body": "Or there also is a rather new place called {place_name}. It’s a little farther away, in {place_nbhd}, but it {place_traits}",
                         "expected_reactions": ["confirm", "notice", "reject"]
                     }
                 }
@@ -92,7 +95,7 @@
     "operational": {
         "switch_person": {
             "availability_sharing_1": {
-                "body": "Okay! I’ll talk to {person_name} then and tell him about the options. In case the day’s don’t work for {person_pronoun}, may I share your general availability for the days after {cutoff_day} with him?",
+                "body": "Okay, no problem! I’ll talk to {person_name} then. It’s either {day_option_1} or {day_option_2} around {time_interval_start} to {time_interval_end} at either {place_option_1} or {place_option_2}. In case the days don’t work for {person_pronoun}, may I share your general availability for the days after {cutoff_day} with him?",
                 "expected_reactions": ["confirm", "reject"]
             },
             "indicate_return": {

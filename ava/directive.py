@@ -22,7 +22,12 @@ class Directive:
     def to_response_belief(self):
         entities = tuple([self.entity_to_literal(entity) for entity in self.entities])
 
-        intent_literal = Literal(self.intents[0])
+        if self.has_intents():
+            intent_literal = Literal(self.intents[0])
+        else:
+            intent_literal = Literal("default_intent")
+
+
 
         eliciting_intention_literal = Literal(self.eliciting_intention)
 

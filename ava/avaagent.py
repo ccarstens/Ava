@@ -55,7 +55,7 @@ class AvaAgent(BDIAgent):
         async def run(self):
             await super().run()
 
-            await asyncio.sleep(0.002)
+            # await asyncio.sleep(0.002)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
             pass

@@ -40,6 +40,7 @@ class Output:
         if utterance.expects_response():
             self.input.listen(name)
         else:
+            log.debug(f"no response expected, putting {utterance.id} in the queue now")
             self.io_queue_out.put((STATEMENT_FINISHED, utterance))
 
     def on_started_word(self, name, location, length):
