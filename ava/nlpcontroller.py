@@ -1,5 +1,6 @@
 from log import log_nlp as log
 from ava.directive import Directive
+from ava.exceptions import *
 import agentspeak as asp
 from spade_bdi.bdi import get_literal_from_functor_and_arguments
 from definitions import *
@@ -23,7 +24,7 @@ class NLPController:
         return directive
 
     def extract_intents(self, wit_dict):
-        intent_array = self.keys_exists(wit_dict, "entities", "intent")
+        intent_array = NLPController.keys_exists(wit_dict, "entities", "intent")
         if not intent_array:
             return NO_INTENT_DETECTED
         else:
@@ -37,10 +38,31 @@ class NLPController:
         return NO_DINNER_CONTACT
 
 
+    @staticmethod
+    def extract_entities(raw: dict):
+        if NLPController.has_entities(raw):
+
+            data = {}
+            for entity, data_list in raw["entities"].items():
+                if entity != "intent":
+                    data[entity] = [single["value"] for single in data_list]
+            return data
+        else:
+            raise NoEntitiesDetected
 
 
+    @staticmethod
+    def has_entities(raw):
+        if not NLPController.keys_exists(raw, "entities"):
+            return False
 
-    def keys_exists(self, element, *keys):
+        entity_keys = list(raw["entities"].keys())
+        entity_keys.remove("intent")
+        return len(entity_keys) > 0
+
+
+    @staticmethod
+    def keys_exists(element, *keys):
         '''
         Check if *keys (nested) exists in `element` (dict).
         '''
