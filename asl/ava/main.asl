@@ -19,11 +19,11 @@ pronouns(david, "he", "his", "him").
 
 
 +!accept_query <-
-    !statement("/query/accept/1", []);
+    // !statement("/query/accept/1", []);
     !init_day_options.
     
 
-+response(main, initial_query, Entities) <-
++response(main, Intent, Entities) <-
     !accept_query.
 
 

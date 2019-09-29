@@ -18,7 +18,7 @@ blocked_day(thursday, yoga).
     !expect_response("/day/suggest/day_range_overview_1", [day_suggestion_1(D1), day_suggestion_2(D2), blocked_day_1(Bd), blocked_day_1_activity(BdA), person_name(X)]).
 
 
-+response(first_day_suggestion, confirm, []) <-
++response(first_day_suggestion, Intent, []) <-
     !second_day_suggestion.
     
 +!second_day_suggestion <-
@@ -26,5 +26,5 @@ blocked_day(thursday, yoga).
     dinner_person(X);
     !expect_response("/day/suggest/pick_second_option_1", [person_name(X), day_suggestion(D)]).
 
-+response(second_day_suggestion, confirm, []) <-
++response(second_day_suggestion, Intent, []) <-
     !init_place_suggestions.

@@ -46,7 +46,23 @@ class Input:
     def on_received_audio_input(self, recognizer: sr.Recognizer, audio: sr.AudioData):
         log.debug("received audio data from microphone")
         try:
-            wit_data = recognizer.recognize_wit(audio, key=WIT_API_KEY, show_all=True)
+            # wit_data = recognizer.recognize_wit(audio, key=WIT_API_KEY, show_all=True)
+            wit_data = {   '_text': 'i think some options would be good',
+    'entities': {   'contact': [   {   'confidence': 0.92303,
+                                       'suggested': True,
+                                       'type': 'value',
+                                       'value': 'i'}],
+                    'intent': [   {   'confidence': 0.99778277635723,
+                                      'value': 'ask_for_suggestions'}],
+                    'local_search_query': [   {   'confidence': 0.92956,
+                                                  'suggested': True,
+                                                  'type': 'value',
+                                                  'value': 'options'},
+                                              {   'confidence': 0.84701,
+                                                  'suggested': True,
+                                                  'type': 'value',
+                                                  'value': 'good'}]},
+    'msg_id': '15i7BV6kwnqoVlxGW'}
             self.queue.put(wit_data)
         except sr.UnknownValueError:
             log.exception("wit.ai could not understand audio")

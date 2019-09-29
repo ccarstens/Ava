@@ -18,7 +18,7 @@
     "day": {
         "suggest": {
             "day_range_overview_1": {
-                "body": "Let’s pick days that we propose to {person_name}: {day_suggestion_1} could work, {blocked_day_1} you’re probably at {blocked_day_1_activity} but {day_suggestion_2} looks good too. Should we take {day_suggestion_2} right away?",
+                "body": "Hey Cornelius! Of course! Let’s pick days that we propose to {person_name}: First of all {day_suggestion_1} could work, {blocked_day_1} you’re probably at {blocked_day_1_activity} in the evening but {day_suggestion_2} looks good. Should we take {day_suggestion_2} right away?",
                 "expected_reactions": ["confirm", "reject_propose"]
             },
             "pick_second_option_1": {
@@ -45,21 +45,18 @@
             "with_context": {
                 "referral": {
                     "friend_1": {
-                        "body": "Alright, number one is {place_name} in {place_nbhd}, it’s the one {referring_friend} send you {time_period_ago}.",
-                        "expected_reactions": ["confirm", "notice", "reject"]
+                        "body": "Alright, number one is {place_name} in {place_nbhd}, it’s the one {referring_friend} send you {time_period_ago}."
                     }
                 },
                 "frequency": {
                     "medium_traits_1": {
-                        "body": "You could also go to {place_name}, the {place_traits} you’ve been to {frequency_visits}.",
-                        "expected_reactions": ["confirm", "notice", "reject"]
+                        "body": "You could also go to {place_name}, the {place_traits} you’ve been to {frequency_visits}."
 
                     }
                 },
                 "novelty_far_vs_traits": {
                     "medium_1": {
-                        "body": "Or there also is a rather new place called {place_name}. It’s a little farther away, in {place_nbhd}, but it {place_traits}",
-                        "expected_reactions": ["confirm", "notice", "reject"]
+                        "body": "Or there also is a rather new place called {place_name}. It’s a little farther away, in {place_nbhd}, but it {place_traits}"
                     }
                 }
             },
@@ -79,7 +76,7 @@
         "suggest": {
             "with_context": {
                 "home_arrival_1": {
-                    "body": "If it’s gonna be {day_option} you’d probably go home first, so between {time_interval_start} and {time_interval_end} might work.",
+                    "body": "On both days you will probably first go home after work, so what do you think of a time frame between {time_interval_start} and {time_interval_end}?",
                     "expected_reactions": ["confirm", "reject_propose", "abort_time_suggestions"]
                 }
             },
