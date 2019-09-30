@@ -1,8 +1,9 @@
 
 
-day_1(wednesday).
+day_1(thursday).
 day_2(friday).
 
+blocked_day(wednesday, work).
 blocked_day(thursday, yoga).
 
 
@@ -13,9 +14,9 @@ blocked_day(thursday, yoga).
 +!first_day_suggestion <-
     day_1(D1);
     day_2(D2);
-    blocked_day(Bd, BdA);
+    blocked_day(D1, BdA);
     dinner_person(X);
-    !expect_response("/day/suggest/day_range_overview_1", [day_suggestion_1(D1), day_suggestion_2(D2), blocked_day_1(Bd), blocked_day_1_activity(BdA), person_name(X)]).
+    !expect_response("/day/suggest/day_range_overview_1", [blocked_day_2(thursday), day_suggestion_2(friday), blocked_day_1(wednesday), blocked_day_2_activity(yoga), person_name(X)]).
 
 
 +response(first_day_suggestion, Intent, []) <-

@@ -1,4 +1,4 @@
-possible_dinner(wednesday, "7:30pm", "8:00pm").
+possible_dinner(friday, "7:30pm", "8:00pm").
 
 
 +!init_time_suggestions <-
@@ -11,7 +11,7 @@ possible_dinner(wednesday, "7:30pm", "8:00pm").
     !first_day_time_suggestion.
     
 +!first_day_time_suggestion <-
-    day_1(Day);
+    day_2(Day);
     possible_dinner(Day, StartInt, EndInt);
     !expect_response("/time/suggest/with_context/home_arrival_1", [
         day_option(Day), 
@@ -27,7 +27,7 @@ possible_dinner(wednesday, "7:30pm", "8:00pm").
     day_1(D1);
     day_2(D2);
     dinner_person(X);
-    possible_dinner(D1, Start, End);
+    possible_dinner(D2, Start, End);
     potential_place(r2, P1, _);
     potential_place(r3, P2, _);
     pronouns(X, _, _, Pronoun);

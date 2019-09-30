@@ -15,6 +15,8 @@ pronouns(david, "he", "his", "him").
     .wait(1000);
     // !find_time_option.
     // !request_place_option_choice.
+    // !summary_availability_sharing.
+    // !first_day_time_suggestion.
     !expect_response("/operational/initial_blank", []).
 
 

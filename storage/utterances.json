@@ -18,7 +18,7 @@
     "day": {
         "suggest": {
             "day_range_overview_1": {
-                "body": "Hey Cornelius! Of course! Let’s pick days that we propose to {person_name}: First of all {day_suggestion_1} could work, {blocked_day_1} you’re probably at {blocked_day_1_activity} in the evening but {day_suggestion_2} looks good. Should we take {day_suggestion_2} right away?",
+                "body": "Hey Cornelius! Of course! Let’s pick days that we propose to {person_name}: On {blocked_day_1} you're probably gonna work late, {blocked_day_2} is a holiday, so you might go to {blocked_day_2_activity} earlier. {day_suggestion_2} would also work it seems. Should we take {day_suggestion_2} right away?",
                 "expected_reactions": ["confirm", "reject_propose"]
             },
             "pick_second_option_1": {
@@ -34,7 +34,7 @@
         },
         "choice": {
             "request_1": {
-                "body": "How do these sound to you?",
+                "body": "What do you think? If you like, choose two places that I'll propose to David!",
                 "expected_reactions": ["reject", "confirm_one", "confirm_two", "confirm_all", "repeat", "repeat_one"]
             },
             "confirm_user_choice_1": {
@@ -76,7 +76,7 @@
         "suggest": {
             "with_context": {
                 "home_arrival_1": {
-                    "body": "On both days you will probably first go home after work, so what do you think of a time frame between {time_interval_start} and {time_interval_end}?",
+                    "body": "On {day_option} you will probably first go home after work, so what do you think of a time frame between {time_interval_start} and {time_interval_end} for both days?",
                     "expected_reactions": ["confirm", "reject_propose", "abort_time_suggestions"]
                 }
             },
