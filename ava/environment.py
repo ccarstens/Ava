@@ -50,10 +50,12 @@ class Environment:
 
     def stop(self):
         log.debug("stopping environment")
+        print(self.ava.bdi.get_beliefs())
         self.ava.stop()
         self.user.stop()
 
         self.db.stop()
+
 
     def setup_nlpc(self):
         self.nlpc = NLPController()

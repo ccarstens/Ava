@@ -301,6 +301,12 @@ def test_udb_can_get_last_utterance_form_history_by_uid_with_own_method():
     assert utterance == last_utterance
 
 
+def test_string():
+    db = get_udb()
+
+    asdf = db.extract_data_from_agent_message_string('[utterance_id("/day/suggest/day_range_overview_1"), eliciting_intention(init_day_options), fill_ins([day_suggestion_1(wednesday), day_suggestion_2(friday), blocked_day_1(thursday), blocked_day_1_activity(yoga)])]')
+
+
 
 def get_udb():
     db = UtteranceDB(DB_FILE)

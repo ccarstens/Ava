@@ -20,3 +20,7 @@ class UtteranceNotFoundException(Exception):
 
 class IOCNoUtteranceNotFoundInHistory(Exception):
     pass
+
+
+class NoEntitiesDetected(Exception):
+    pass

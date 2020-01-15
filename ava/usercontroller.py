@@ -39,7 +39,7 @@ class UserController(BDIAgent):
 
             self.agent.handle_io_response()
 
-            await asyncio.sleep(0.002)
+            # await asyncio.sleep(0.002)
             # await asyncio.sleep(0.5)
 
         async def handle_message_with_custom_ilf_type(self, message: Message):
@@ -74,7 +74,9 @@ class UserController(BDIAgent):
                     log.debug("statement finished")
                     utterance = payload
 
+                    log.debug(f"setting belief for finished utterance {utterance.id}")
                     self.ava.bdi.add_belief_literal(utterance.to_statement_finished_belief())
+                    log.debug(f"after setting belief for finished utterance {utterance.id}")
 
                     pass
                 elif flag == RECEIVED_USER_RESPONSE:
@@ -87,11 +89,8 @@ class UserController(BDIAgent):
 
                     self.db.history.push(directive)
                     log.debug(f"received intents {directive.intents}")
-                    if directive.has_intents():
-                        response_literal = directive.to_response_belief()
-                        self.ava.bdi.add_belief_literal(response_literal)
-                    else:
-                        log.error("no intents detected in user response")
+                    response_literal = directive.to_response_belief()
+                    self.ava.bdi.add_belief_literal(response_literal)
 
         except Empty:
             pass

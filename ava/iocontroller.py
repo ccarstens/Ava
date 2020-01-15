@@ -30,7 +30,11 @@ class IOController:
                 if utterance:
                     log.debug(f"got incoming request {utterance.id}")
                     self.utterance_history.append(utterance)
-                    self.chat(utterance)
+                    if len(utterance.get_body()):
+                        self.chat(utterance)
+                    else:
+                        self.input.listen(utterance.id)
+
 
             except Empty:
                 pass
