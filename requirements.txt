@@ -1,6 +1,6 @@
 agentspeak==0.1.0
 aioconsole==0.1.15
-aiohttp==3.5.4
+aiohttp==3.7.4
 aiohttp-jinja2==1.1.2
 aioopenssl==0.4.1
 aiosasl==0.4.0
