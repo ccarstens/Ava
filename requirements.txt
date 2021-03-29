@@ -29,7 +29,7 @@ pyasn1==0.4.7
 pyasn1-modules==0.2.6
 PyAudio==0.2.11
 pycparser==2.19
-Pygments==2.4.2
+Pygments==2.7.4
 pyobjc==5.2
 pyobjc-core==5.2
 pyobjc-framework-Accounts==5.2
