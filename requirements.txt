@@ -10,7 +10,7 @@ arrow==0.14.6
 asn1crypto==0.24.0
 async-timeout==3.0.1
 attrs==19.1.0
-Babel==2.7.0
+Babel==2.9.1
 better-exceptions-fork==0.2.1.post6
 certifi==2019.6.16
 cffi==1.12.3
