@@ -6,7 +6,7 @@ aioopenssl==0.4.1
 aiosasl==0.4.0
 aioxmpp==0.10.5
 ansimarkup==1.4.0
-arrow==0.14.6
+arrow==0.15.1
 asn1crypto==0.24.0
 async-timeout==3.0.1
 attrs==19.1.0
